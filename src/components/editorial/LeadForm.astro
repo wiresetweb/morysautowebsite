@@ -1,80 +1,93 @@
 ---
 import Icon from "../Icon.astro";
+import { form, business } from "../../data/content.ts";
+import { getLang } from "../../data/i18n.ts";
+
+const lang = getLang(Astro.url.pathname);
+const t = form[lang];
 
 const inputClass =
   "w-full bg-white border border-brand-navy/25 px-4 py-3 text-brand-navy placeholder:text-brand-navy/35 focus:outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/30 transition-colors";
 const labelClass =
   "block text-[0.7rem] uppercase tracking-[0.18em] text-brand-navy font-bold mb-2";
+
+const fallbackError = t.errorBody;
 ---
 
-<form id="lead-form" class="space-y-6" novalidate>
+<form
+  id="lead-form"
+  class="space-y-6"
+  novalidate
+  data-lang={lang}
+  data-error-fallback={fallbackError}
+>
   <!-- Honeypot: hidden from humans, bots fill it -->
   <div class="absolute -left-[9999px]" aria-hidden="true">
-    <label>Leave this blank<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
+    <label>{t.honeypotLabel}<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
   </div>
 
   <div class="grid sm:grid-cols-2 gap-5">
     <div>
-      <label class={labelClass} for="lf-name">Name <span class="text-brand-red">*</span></label>
-      <input class={inputClass} id="lf-name" name="name" type="text" required autocomplete="name" placeholder="Your name" />
+      <label class={labelClass} for="lf-name">{t.name} <span class="text-brand-red">*</span></label>
+      <input class={inputClass} id="lf-name" name="name" type="text" required autocomplete="name" placeholder={t.namePlaceholder} />
     </div>
     <div>
-      <label class={labelClass} for="lf-phone">Phone <span class="text-brand-red">*</span></label>
-      <input class={inputClass} id="lf-phone" name="phone" type="tel" required autocomplete="tel" placeholder="(305) 555-0123" />
+      <label class={labelClass} for="lf-phone">{t.phone} <span class="text-brand-red">*</span></label>
+      <input class={inputClass} id="lf-phone" name="phone" type="tel" required autocomplete="tel" placeholder={t.phonePlaceholder} />
     </div>
   </div>
 
   <div>
-    <label class={labelClass} for="lf-email">Email <span class="text-brand-red">*</span></label>
-    <input class={inputClass} id="lf-email" name="email" type="email" required autocomplete="email" placeholder="you@email.com" />
-    <p class="mt-1.5 text-xs text-brand-ink/55 font-serif">We'll send a confirmation here once we get your request.</p>
+    <label class={labelClass} for="lf-email">{t.email} <span class="text-brand-red">*</span></label>
+    <input class={inputClass} id="lf-email" name="email" type="email" required autocomplete="email" placeholder={t.emailPlaceholder} />
+    <p class="mt-1.5 text-xs text-brand-ink/55 font-serif">{t.emailHelp}</p>
   </div>
 
   <fieldset class="border border-brand-navy/20 p-5">
-    <legend class="px-2 text-[0.7rem] uppercase tracking-[0.18em] text-brand-navy font-bold">The Vehicle</legend>
+    <legend class="px-2 text-[0.7rem] uppercase tracking-[0.18em] text-brand-navy font-bold">{t.vehicleLegend}</legend>
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
       <div>
-        <label class={labelClass} for="lf-year">Year</label>
+        <label class={labelClass} for="lf-year">{t.year}</label>
         <input class={inputClass} id="lf-year" name="vehicle_year" type="text" inputmode="numeric" maxlength="4" placeholder="2014" />
       </div>
       <div>
-        <label class={labelClass} for="lf-make">Make</label>
+        <label class={labelClass} for="lf-make">{t.make}</label>
         <input class={inputClass} id="lf-make" name="vehicle_make" type="text" placeholder="Toyota" />
       </div>
       <div class="col-span-2 sm:col-span-1">
-        <label class={labelClass} for="lf-model">Model</label>
+        <label class={labelClass} for="lf-model">{t.model}</label>
         <input class={inputClass} id="lf-model" name="vehicle_model" type="text" placeholder="Camry" />
       </div>
     </div>
   </fieldset>
 
   <div>
-    <label class={labelClass} for="lf-part">Part needed <span class="text-brand-red">*</span></label>
-    <input class={inputClass} id="lf-part" name="part_needed" type="text" required placeholder="e.g. front bumper, alternator, windshield" />
+    <label class={labelClass} for="lf-part">{t.partNeeded} <span class="text-brand-red">*</span></label>
+    <input class={inputClass} id="lf-part" name="part_needed" type="text" required placeholder={t.partPlaceholder} />
   </div>
 
   <div class="grid sm:grid-cols-2 gap-5">
     <div>
-      <label class={labelClass} for="lf-condition">Condition preference</label>
+      <label class={labelClass} for="lf-condition">{t.conditionPref}</label>
       <select class={inputClass} id="lf-condition" name="condition_pref">
-        <option value="any">No preference</option>
-        <option value="new">New</option>
-        <option value="used">Used</option>
-        <option value="aftermarket">Aftermarket</option>
+        <option value="any">{t.conditionAny}</option>
+        <option value="new">{t.conditionNew}</option>
+        <option value="used">{t.conditionUsed}</option>
+        <option value="aftermarket">{t.conditionAftermarket}</option>
       </select>
     </div>
     <div>
-      <label class={labelClass} for="lf-language">Preferred language</label>
+      <label class={labelClass} for="lf-language">{t.languagePref}</label>
       <select class={inputClass} id="lf-language" name="language_pref">
-        <option value="en">English</option>
-        <option value="es">Español</option>
+        <option value="en" selected={lang === "en"}>English</option>
+        <option value="es" selected={lang === "es"}>Español</option>
       </select>
     </div>
   </div>
 
   <div>
-    <label class={labelClass} for="lf-message">Anything else?</label>
-    <textarea class={`${inputClass} resize-y min-h-[110px]`} id="lf-message" name="message" placeholder="VIN, trim, color, or any detail that helps us find the right part."></textarea>
+    <label class={labelClass} for="lf-message">{t.message}</label>
+    <textarea class={`${inputClass} resize-y min-h-[110px]`} id="lf-message" name="message" placeholder={t.messagePlaceholder}></textarea>
   </div>
 
   <div class="flex flex-col sm:flex-row sm:items-center gap-4 pt-2">
@@ -85,21 +98,21 @@ const labelClass =
     >
       <span class="lf-label inline-flex items-center gap-2">
         <Icon name="arrow-right" size={18} strokeWidth={2.25} />
-        Send part request
+        {t.submit}
       </span>
-      <span class="lf-spinner hidden">Sending…</span>
+      <span class="lf-spinner hidden">{t.sending}</span>
     </button>
-    <p class="text-xs text-brand-ink/55 font-serif">No obligation. We'll call or email you back with options and pricing.</p>
+    <p class="text-xs text-brand-ink/55 font-serif">{t.disclaimer}</p>
   </div>
 
   <!-- Status messages -->
   <div id="lf-success" class="hidden border-2 border-brand-navy bg-brand-cream p-5">
-    <p class="font-condensed font-bold uppercase text-2xl text-brand-navy">Request received.</p>
-    <p class="mt-2 text-brand-ink/85 font-serif">Thanks — we've got your part request and sent a confirmation to your email. We'll be in touch with options and pricing, usually same week.</p>
+    <p class="font-condensed font-bold uppercase text-2xl text-brand-navy">{t.successTitle}</p>
+    <p class="mt-2 text-brand-ink/85 font-serif">{t.successBody}</p>
   </div>
   <div id="lf-error" class="hidden border-2 border-brand-red bg-brand-red/5 p-5">
-    <p class="font-condensed font-bold uppercase text-xl text-brand-red">Something went wrong.</p>
-    <p id="lf-error-msg" class="mt-2 text-brand-ink/85 font-serif">Please try again, or just call us at 305-835-2777.</p>
+    <p class="font-condensed font-bold uppercase text-xl text-brand-red">{t.errorTitle}</p>
+    <p id="lf-error-msg" class="mt-2 text-brand-ink/85 font-serif">{t.errorBody}</p>
   </div>
 </form>
 
@@ -112,6 +125,7 @@ const labelClass =
     const successBox = document.getElementById("lf-success")!;
     const errorBox = document.getElementById("lf-error")!;
     const errorMsg = document.getElementById("lf-error-msg")!;
+    const fallbackError = form.dataset.errorFallback || "Please try again, or just call us at 305-835-2777.";
 
     const setLoading = (loading: boolean) => {
       submitBtn.disabled = loading;
@@ -123,7 +137,6 @@ const labelClass =
       e.preventDefault();
       errorBox.classList.add("hidden");
 
-      // Native validation for required fields
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
@@ -146,8 +159,7 @@ const labelClass =
         successBox.scrollIntoView({ behavior: "smooth", block: "center" });
       } catch (err) {
         errorMsg.textContent =
-          (err instanceof Error ? err.message : "") ||
-          "Please try again, or just call us at 305-835-2777.";
+          (err instanceof Error ? err.message : "") || fallbackError;
         errorBox.classList.remove("hidden");
         errorBox.scrollIntoView({ behavior: "smooth", block: "center" });
       } finally {

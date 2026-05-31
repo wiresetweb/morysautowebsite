@@ -1,19 +1,18 @@
 ---
-import Base from "../layouts/Base.astro";
-import Header from "../components/editorial/Header.astro";
-import Footer from "../components/editorial/Footer.astro";
-import ContactCta from "../components/editorial/sections/ContactCta.astro";
-import PhotoPlaceholder from "../components/PhotoPlaceholder.astro";
-import Icon from "../components/Icon.astro";
-import { about, ui } from "../data/content.ts";
-import { getLang, localizePath } from "../data/i18n.ts";
+import Base from "../../layouts/Base.astro";
+import Header from "../../components/editorial/Header.astro";
+import Footer from "../../components/editorial/Footer.astro";
+import ContactCta from "../../components/editorial/sections/ContactCta.astro";
+import PhotoPlaceholder from "../../components/PhotoPlaceholder.astro";
+import Icon from "../../components/Icon.astro";
+import { about, ui } from "../../data/content.ts";
+import { localizePath } from "../../data/i18n.ts";
 
-const lang = getLang(Astro.url.pathname);
-const a = about[lang];
-const t = ui[lang];
+const a = about.es;
+const t = ui.es;
 const SITE = "https://morysautoparts.com";
-const aboutPath = localizePath("/about", lang);
-const homePath = localizePath("/", lang);
+const aboutPath = localizePath("/about", "es");
+const homePath = localizePath("/", "es");
 
 const breadcrumb = {
   "@context": "https://schema.org",

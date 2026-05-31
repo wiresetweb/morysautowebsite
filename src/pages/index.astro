@@ -9,13 +9,18 @@ import WhatWeSource from "../components/editorial/sections/WhatWeSource.astro";
 import ShopBreak from "../components/editorial/sections/ShopBreak.astro";
 import ServiceArea from "../components/editorial/sections/ServiceArea.astro";
 import ContactCta from "../components/editorial/sections/ContactCta.astro";
+import { home } from "../data/content.ts";
 import { localBusinessSchema } from "../data/seo.ts";
+import { getLang } from "../data/i18n.ts";
+
+const lang = getLang(Astro.url.pathname);
+const meta = home[lang];
 ---
 
 <Base
-  title="Mory's Auto Parts and Glass — Hialeah, FL · New, Used & Aftermarket Auto Parts"
-  description="Hard-to-find auto parts at fair prices. New, used, and aftermarket parts plus auto glass for South Florida — Miami-Dade and Broward. Call 305-835-2777."
-  jsonLd={localBusinessSchema()}
+  title={meta.metaTitle}
+  description={meta.metaDescription}
+  jsonLd={localBusinessSchema(lang)}
 >
   <Header />
   <main class="flex-1">

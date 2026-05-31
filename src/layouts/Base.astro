@@ -1,24 +1,39 @@
 ---
 import "../styles/global.css";
+import { getLang, altPath, normalizePath, type Lang } from "../data/i18n.ts";
 
 interface Props {
   title: string;
   description?: string;
   /** Optional JSON-LD structured data object */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Override the locale; defaults to detection from the URL. */
+  lang?: Lang;
+  /** Set to true on admin/staff pages to skip hreflang alternates. */
+  noAlternates?: boolean;
 }
 
+const detectedLang = getLang(Astro.url.pathname);
 const {
   title,
   description = "Mory's Auto Parts and Glass — new, used, and aftermarket auto parts plus auto glass in Hialeah, FL. Serving Miami-Dade and Broward. Call 305-835-2777.",
   jsonLd,
+  lang = detectedLang,
+  noAlternates = false,
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+const origin = Astro.site ?? new URL(Astro.url.origin);
+const path = normalizePath(Astro.url.pathname);
+const canonical = new URL(path, origin).href;
+const ogLocale = lang === "es" ? "es_US" : "en_US";
+const ogLocaleAlt = lang === "es" ? "en_US" : "es_US";
+
+const enHref = new URL(normalizePath(altPath(path, "en")), origin).href;
+const esHref = new URL(normalizePath(altPath(path, "es")), origin).href;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,17 +44,26 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).hr
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonical} />
 
+    {!noAlternates && (
+      <>
+        <link rel="alternate" hreflang="en" href={enHref} />
+        <link rel="alternate" hreflang="es" href={esHref} />
+        <link rel="alternate" hreflang="x-default" href={enHref} />
+      </>
+    )}
+
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={ogLocale} />
+    {!noAlternates && <meta property="og:locale:alternate" content={ogLocaleAlt} />}
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL("/og-image.jpg", Astro.site ?? Astro.url.origin).href} />
+    <meta property="og:image" content={new URL("/og-image.jpg", origin).href} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content={new URL("/og-image.jpg", Astro.site ?? Astro.url.origin).href} />
+    <meta name="twitter:image" content={new URL("/og-image.jpg", origin).href} />
 
     <!-- Fonts: Saira Condensed (display), Lora (body serif), Inter (UI) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

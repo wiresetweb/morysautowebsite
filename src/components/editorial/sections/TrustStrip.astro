@@ -1,14 +1,17 @@
 ---
 import Icon from "../../Icon.astro";
-import { reviews } from "../../../data/content.ts";
+import { reviews, sections } from "../../../data/content.ts";
+import { getLang } from "../../../data/i18n.ts";
 
-const [featured, ...rest] = reviews;
+const lang = getLang(Astro.url.pathname);
+const s = sections[lang];
+const [featured, ...rest] = reviews[lang];
 ---
 
 <section class="bg-brand-cream py-20 lg:py-24 border-b border-brand-navy/15">
   <div class="mx-auto max-w-6xl px-5 lg:px-8" data-reveal>
     <p class="text-[0.7rem] font-bold uppercase tracking-[0.32em] text-brand-navy/70 border-l-4 border-brand-yellow pl-3">
-      No. 02 — The Word on the Street
+      {s.trustEyebrow}
     </p>
 
     <!-- Featured pull quote -->
@@ -28,7 +31,7 @@ const [featured, ...rest] = reviews;
         <div class="flex gap-0.5 text-brand-yellow">
           {[0, 1, 2, 3, 4].map(() => <Icon name="star" size={16} strokeWidth={2.25} />)}
         </div>
-        <p class="mt-2 text-[0.65rem] uppercase tracking-[0.22em] text-brand-navy/60 font-semibold">Google · 5/5</p>
+        <p class="mt-2 text-[0.65rem] uppercase tracking-[0.22em] text-brand-navy/60 font-semibold">{s.trustReviewMeta}</p>
       </div>
     </figure>
 
@@ -52,7 +55,7 @@ const [featured, ...rest] = reviews;
     </div>
 
     <p class="mt-10 text-[0.7rem] text-brand-ink/45 italic font-serif">
-      Filler testimonials — replaced by live Google Reviews on launch.
+      {s.trustReplaceNote}
     </p>
   </div>
 </section>

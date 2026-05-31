@@ -1,7 +1,14 @@
 ---
 import PhotoPlaceholder from "../../PhotoPlaceholder.astro";
 import Icon from "../../Icon.astro";
-import { business, hero, stats } from "../../../data/content.ts";
+import { business, hero, stats, sections } from "../../../data/content.ts";
+import { getLang, localizePath } from "../../../data/i18n.ts";
+
+const lang = getLang(Astro.url.pathname);
+const h = hero[lang];
+const s = sections[lang];
+const st = stats[lang];
+const contactHref = localizePath("/contact", lang);
 ---
 
 <section class="relative bg-brand-cream text-brand-navy lg:min-h-[calc(100svh-4rem-1.75rem)] overflow-hidden">
@@ -9,27 +16,25 @@ import { business, hero, stats } from "../../../data/content.ts";
     <div class="grid gap-10 lg:gap-14 lg:grid-cols-12 lg:items-start">
       <div class="lg:col-span-7">
         <p class="text-[0.7rem] font-bold uppercase tracking-[0.32em] text-brand-navy/70 border-l-4 border-brand-yellow pl-3">
-          No. 01 — The Issue · Hialeah
+          No. 01 — {h.eyebrow}
         </p>
         <h1 class="mt-6 font-condensed font-bold uppercase text-[3.2rem] sm:text-[4.5rem] lg:text-[6rem] leading-[0.88] tracking-[-0.005em] text-brand-navy">
-          {hero.headlineLead}<br />
+          {h.headlineLead}<br />
           <span class="relative inline-block">
-            <span class="relative z-10">{hero.headlineHighlight}</span>
+            <span class="relative z-10">{h.headlineHighlight}</span>
             <span class="absolute left-0 right-0 -bottom-1 h-3 lg:h-4 bg-brand-yellow -z-0" aria-hidden="true"></span>
           </span>?<br />
-          <span class="text-brand-yellow">{hero.headlineTail}</span>
+          <span class="text-brand-yellow">{h.headlineTail}</span>
         </h1>
 
         <div class="mt-7 grid gap-5 sm:grid-cols-2 max-w-xl">
           <div>
-            <p class="text-[0.65rem] uppercase tracking-[0.22em] text-brand-navy/60 font-bold mb-2">Lead</p>
-            <p class="text-base text-brand-ink/85 font-serif leading-snug">{hero.subhead}</p>
+            <p class="text-[0.65rem] uppercase tracking-[0.22em] text-brand-navy/60 font-bold mb-2">{h.leadLabel}</p>
+            <p class="text-base text-brand-ink/85 font-serif leading-snug">{h.leadBody}</p>
           </div>
           <div>
-            <p class="text-[0.65rem] uppercase tracking-[0.22em] text-brand-navy/60 font-bold mb-2">How to order</p>
-            <p class="text-base text-brand-ink/85 font-serif leading-snug">
-              Call the shop with year, make, model, and the part. We source it from the network, quote the options, and have it ready that week.
-            </p>
+            <p class="text-[0.65rem] uppercase tracking-[0.22em] text-brand-navy/60 font-bold mb-2">{h.howLabel}</p>
+            <p class="text-base text-brand-ink/85 font-serif leading-snug">{h.howBody}</p>
           </div>
         </div>
 
@@ -39,13 +44,13 @@ import { business, hero, stats } from "../../../data/content.ts";
             class="inline-flex items-center justify-center gap-2 bg-brand-navy text-white font-bold text-base px-6 py-3.5 hover:bg-brand-yellow hover:text-brand-navy transition-colors"
           >
             <Icon name="phone" size={18} strokeWidth={2.25} />
-            {hero.ctaPrimary} {business.phone}
+            {h.ctaPrimary} {business.phone}
           </a>
           <a
-            href="/contact"
+            href={contactHref}
             class="inline-flex items-center justify-center gap-2 text-brand-navy font-semibold px-2 py-3.5 border-b-2 border-brand-navy hover:border-brand-yellow transition-colors"
           >
-            {hero.ctaSecondary}
+            {h.ctaSecondary}
             <Icon name="arrow-right" size={16} strokeWidth={2.25} />
           </a>
         </div>
@@ -54,7 +59,7 @@ import { business, hero, stats } from "../../../data/content.ts";
       <div class="lg:col-span-5">
         <div class="relative">
           <PhotoPlaceholder
-            label="Hero photo — shop interior, owner at counter, or wall of parts"
+            label={s.heroPhotoLabel}
             ratio="3/4"
             recommended="1200×1600 JPG"
             class="!rounded-none ring-1 ring-brand-navy/10"
@@ -62,7 +67,7 @@ import { business, hero, stats } from "../../../data/content.ts";
           <!-- Magazine-style price tag overlay -->
           <div class="absolute -bottom-4 -left-4 bg-brand-yellow text-brand-navy px-4 py-3 max-w-[14rem]">
             <p class="text-[0.6rem] uppercase tracking-[0.2em] font-bold">Fig. 01</p>
-            <p class="mt-1 font-condensed text-lg font-bold uppercase leading-tight">A real shop, in real Hialeah.</p>
+            <p class="mt-1 font-condensed text-lg font-bold uppercase leading-tight">{h.figCaption}</p>
           </div>
         </div>
       </div>
@@ -72,10 +77,10 @@ import { business, hero, stats } from "../../../data/content.ts";
   <!-- Stats bar at very bottom of hero -->
   <div class="mt-14 lg:mt-20 border-y border-brand-navy/20 bg-brand-cream">
     <div class="mx-auto max-w-6xl px-5 lg:px-8 grid grid-cols-2 lg:grid-cols-4">
-      {stats.map((s, i) => (
+      {st.map((stat, i) => (
         <div class={`py-5 lg:py-6 ${i > 0 ? 'lg:border-l border-brand-navy/15' : ''} ${i === 1 || i === 3 ? 'border-l border-brand-navy/15' : ''} ${i < 2 ? 'border-b border-brand-navy/15 lg:border-b-0' : ''} px-3 lg:px-6`}>
-          <p class="font-condensed font-bold uppercase text-2xl lg:text-3xl text-brand-navy leading-none">{s.value}</p>
-          <p class="mt-2 text-[0.65rem] uppercase tracking-[0.18em] text-brand-navy/60 font-semibold">{s.label}</p>
+          <p class="font-condensed font-bold uppercase text-2xl lg:text-3xl text-brand-navy leading-none">{stat.value}</p>
+          <p class="mt-2 text-[0.65rem] uppercase tracking-[0.18em] text-brand-navy/60 font-semibold">{stat.label}</p>
         </div>
       ))}
     </div>
