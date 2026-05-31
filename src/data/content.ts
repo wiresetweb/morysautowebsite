@@ -252,12 +252,6 @@ export const categories: Record<Lang, Category[]> = {
   ],
 };
 
-// Service-area cities (display labels — slugs always stay English/lowercase-hyphen).
-export const serviceCities: Record<Lang, string[]> = {
-  en: ["Hialeah", "Miami", "Hialeah Gardens", "Opa-Locka", "Doral", "North Miami", "Fontainebleau", "Kendall"],
-  es: ["Hialeah", "Miami", "Hialeah Gardens", "Opa-Locka", "Doral", "North Miami", "Fontainebleau", "Kendall"],
-};
-
 export interface Stat {
   value: string;
   label: string;
@@ -787,6 +781,8 @@ export interface CityPageCopy {
   nearbyHeading: (city: string) => string;
   alsoEyebrow: string;
   mapBadge: (city: string) => string;
+  metaTitle: (city: string) => string;
+  metaDescription: (city: string, county: string) => string;
 }
 
 export const cityPage: Record<Lang, CityPageCopy> = {
@@ -804,6 +800,9 @@ export const cityPage: Record<Lang, CityPageCopy> = {
     nearbyHeading: (city) => `Neighborhoods we cover near ${city}`,
     alsoEyebrow: "Also serving across Miami-Dade & Broward",
     mapBadge: (city) => `Serving ${city}`,
+    metaTitle: (city) => `Auto Parts in ${city}, FL — New, Used & Aftermarket | Mory's`,
+    metaDescription: (city, county) =>
+      `Hard-to-find auto parts and glass for ${city}, ${county}. New, used, and aftermarket at fair prices from Mory's in Hialeah. Bilingual service. Call ${business.phone}.`,
   },
   es: {
     breadcrumbHome: "Inicio",
@@ -819,6 +818,9 @@ export const cityPage: Record<Lang, CityPageCopy> = {
     nearbyHeading: (city) => `Barrios que cubrimos cerca de ${city}`,
     alsoEyebrow: "También sirviendo por Miami-Dade y Broward",
     mapBadge: (city) => `Sirviendo a ${city}`,
+    metaTitle: (city) => `Piezas de Auto en ${city}, FL — Nuevas, Usadas y Aftermarket | Mory's`,
+    metaDescription: (city, county) =>
+      `Piezas de auto difíciles de encontrar y vidrio para ${city}, ${county}. Nuevas, usadas y aftermarket a precios justos desde Mory's en Hialeah. Servicio bilingüe. Llama al ${business.phone}.`,
   },
 };
 

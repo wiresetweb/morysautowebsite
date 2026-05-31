@@ -6,12 +6,7 @@ import ContactCta from "../../components/editorial/sections/ContactCta.astro";
 import ServiceMap from "../../components/ServiceMap.astro";
 import Icon from "../../components/Icon.astro";
 import { business, categories, cityPage, ui } from "../../data/content.ts";
-import {
-  locations,
-  locationSchema,
-  cityPageTitle,
-  cityPageDescription,
-} from "../../data/seo.ts";
+import { locations, locationSchema } from "../../data/seo.ts";
 import { getLang, localizePath } from "../../data/i18n.ts";
 
 export function getStaticPaths() {
@@ -31,8 +26,8 @@ const homePath = localizePath("/", lang);
 const saPath = localizePath("/service-area", lang);
 const cityPath = localizePath(`/service-area/${loc.slug}`, lang);
 
-const title = cityPageTitle(loc, lang);
-const description = cityPageDescription(loc, lang);
+const title = cp.metaTitle(loc.name);
+const description = cp.metaDescription(loc.name, loc.county[lang]);
 
 const breadcrumb = {
   "@context": "https://schema.org",

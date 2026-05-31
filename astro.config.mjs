@@ -12,6 +12,12 @@ export default defineConfig({
     sitemap({
       // Keep the staff area out of the sitemap.
       filter: (page) => !page.includes('/admin'),
+      // Per-URL hreflang alternates in sitemap.xml — strongest signal to Google
+      // that /es/<path> and /<path> are the same page in different languages.
+      i18n: {
+        defaultLocale: 'en',
+        locales: { en: 'en-US', es: 'es-US' },
+      },
     }),
   ],
   vite: {

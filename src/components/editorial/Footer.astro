@@ -1,10 +1,12 @@
 ---
 import Icon from "../Icon.astro";
 import { business, ui, hours } from "../../data/content.ts";
-import { getLang, localizePath } from "../../data/i18n.ts";
+import { getLang, localizePath, normalizePath } from "../../data/i18n.ts";
 
 const lang = getLang(Astro.url.pathname);
 const t = ui[lang];
+const otherLang = lang === "en" ? "es" : "en";
+const switchHref = localizePath(normalizePath(Astro.url.pathname), otherLang);
 const adminHref = "/admin";
 ---
 
@@ -53,9 +55,9 @@ const adminHref = "/admin";
       <p>© {new Date().getFullYear()} Mory's Auto Parts &amp; Glass · Hialeah, FL</p>
       <div class="flex items-center gap-5">
         <a
-          href={localizePath("/", lang === "en" ? "es" : "en")}
+          href={switchHref}
           class="hover:text-brand-navy font-semibold"
-          hreflang={lang === "en" ? "es" : "en"}
+          hreflang={otherLang}
         >
           {t.langSwitchTo}
         </a>

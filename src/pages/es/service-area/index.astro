@@ -7,13 +7,14 @@ import ServiceMap from "../../../components/ServiceMap.astro";
 import Icon from "../../../components/Icon.astro";
 import { business, serviceAreaIndex, ui } from "../../../data/content.ts";
 import { locations } from "../../../data/seo.ts";
-import { localizePath } from "../../../data/i18n.ts";
+import { getLang, localizePath } from "../../../data/i18n.ts";
 
-const s = serviceAreaIndex.es;
-const t = ui.es;
+const lang = getLang(Astro.url.pathname);
+const s = serviceAreaIndex[lang];
+const t = ui[lang];
 const SITE = "https://morysautoparts.com";
-const homePath = localizePath("/", "es");
-const saPath = localizePath("/service-area", "es");
+const homePath = localizePath("/", lang);
+const saPath = localizePath("/service-area", lang);
 
 const breadcrumb = {
   "@context": "https://schema.org",
@@ -63,10 +64,10 @@ const breadcrumb = {
           <ul class="divide-y divide-brand-navy/15">
             {locations.map((l) => (
               <li>
-                <a href={localizePath(`/service-area/${l.slug}`, "es")} class="flex items-center justify-between py-4 group">
+                <a href={localizePath(`/service-area/${l.slug}`, lang)} class="flex items-center justify-between py-4 group">
                   <span>
                     <span class="block font-condensed font-bold uppercase text-xl text-brand-navy tracking-[0.02em] group-hover:text-brand-yellow transition-colors">{l.name}</span>
-                    <span class="block text-xs text-brand-ink/55 font-serif">{l.county.es}</span>
+                    <span class="block text-xs text-brand-ink/55 font-serif">{l.county[lang]}</span>
                   </span>
                   <Icon name="arrow-right" size={16} strokeWidth={2} class="text-brand-navy/40 group-hover:text-brand-yellow transition-colors" />
                 </a>

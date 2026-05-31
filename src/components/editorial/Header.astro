@@ -1,12 +1,12 @@
 ---
 import Icon from "../Icon.astro";
 import { business, ui } from "../../data/content.ts";
-import { getLang, localizePath, altPath, normalizePath } from "../../data/i18n.ts";
+import { getLang, localizePath, normalizePath } from "../../data/i18n.ts";
 
 const lang = getLang(Astro.url.pathname);
 const t = ui[lang];
 const otherLang = lang === "en" ? "es" : "en";
-const switchHref = altPath(normalizePath(Astro.url.pathname), otherLang);
+const switchHref = localizePath(normalizePath(Astro.url.pathname), otherLang);
 const home = localizePath("/", lang);
 const about = localizePath("/about", lang);
 const serviceArea = localizePath("/service-area", lang);

@@ -11,14 +11,16 @@ import ServiceArea from "../../components/editorial/sections/ServiceArea.astro";
 import ContactCta from "../../components/editorial/sections/ContactCta.astro";
 import { home } from "../../data/content.ts";
 import { localBusinessSchema } from "../../data/seo.ts";
+import { getLang } from "../../data/i18n.ts";
 
-const meta = home.es;
+const lang = getLang(Astro.url.pathname);
+const meta = home[lang];
 ---
 
 <Base
   title={meta.metaTitle}
   description={meta.metaDescription}
-  jsonLd={localBusinessSchema("es")}
+  jsonLd={localBusinessSchema(lang)}
 >
   <Header />
   <main class="flex-1">

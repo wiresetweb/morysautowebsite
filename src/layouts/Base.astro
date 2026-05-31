@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { getLang, altPath, normalizePath, type Lang } from "../data/i18n.ts";
+import { getLang, localizePath, normalizePath, type Lang } from "../data/i18n.ts";
 
 interface Props {
   title: string;
@@ -28,8 +28,8 @@ const canonical = new URL(path, origin).href;
 const ogLocale = lang === "es" ? "es_US" : "en_US";
 const ogLocaleAlt = lang === "es" ? "en_US" : "es_US";
 
-const enHref = new URL(normalizePath(altPath(path, "en")), origin).href;
-const esHref = new URL(normalizePath(altPath(path, "es")), origin).href;
+const enHref = new URL(normalizePath(localizePath(path, "en")), origin).href;
+const esHref = new URL(normalizePath(localizePath(path, "es")), origin).href;
 ---
 
 <!doctype html>

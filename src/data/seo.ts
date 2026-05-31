@@ -311,18 +311,3 @@ export const locations: Location[] = [
 export function getLocation(slug: string): Location | undefined {
   return locations.find((l) => l.slug === slug);
 }
-
-// --- City-page meta builders ---
-export function cityPageTitle(loc: Location, lang: Lang): string {
-  if (lang === "es") {
-    return `Piezas de Auto en ${loc.name}, FL — Nuevas, Usadas y Aftermarket | Mory's`;
-  }
-  return `Auto Parts in ${loc.name}, FL — New, Used & Aftermarket | Mory's`;
-}
-
-export function cityPageDescription(loc: Location, lang: Lang): string {
-  if (lang === "es") {
-    return `Piezas de auto difíciles de encontrar y vidrio para ${loc.name}, ${loc.county.es}. Nuevas, usadas y aftermarket a precios justos desde Mory's en Hialeah. Servicio bilingüe. Llama al ${business.phone}.`;
-  }
-  return `Hard-to-find auto parts and glass for ${loc.name}, ${loc.county.en}. New, used, and aftermarket at fair prices from Mory's in Hialeah. Bilingual service. Call ${business.phone}.`;
-}

@@ -99,7 +99,22 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       <tr><td valign="top"><b>Message</b></td><td>${esc(lead.message) || "—"}</td></tr>
     </table>`;
 
-  const customerHtml = `
+  const isEs = lead.language_pref === "es";
+  const customerSubject = isEs
+    ? "Recibimos tu pedido de pieza — Mory's Auto Parts"
+    : "We got your part request — Mory's Auto Parts";
+  const customerHtml = isEs
+    ? `
+    <div style="font-family:sans-serif;font-size:15px;line-height:1.6;color:#1a1a1a">
+      <p>Hola ${esc(lead.name)},</p>
+      <p>Gracias por contactar a <b>Mory's Auto Parts and Glass</b>. Recibimos tu pedido de:</p>
+      <p style="padding:10px 14px;background:#f6efe1;border-left:4px solid #da861c">
+        <b>${esc(lead.part_needed)}</b><br>${esc(vehicle)}
+      </p>
+      <p>Vamos a mover nuestra red y te respondemos con opciones y precios — generalmente esa misma semana. Si es urgente, llámanos al <b>305-835-2777</b>.</p>
+      <p style="color:#555">— Mory's Auto Parts and Glass · 151 E 10th Ave, Hialeah, FL</p>
+    </div>`
+    : `
     <div style="font-family:sans-serif;font-size:15px;line-height:1.6;color:#1a1a1a">
       <p>Hi ${esc(lead.name)},</p>
       <p>Thanks for reaching out to <b>Mory's Auto Parts and Glass</b>. We got your request for:</p>
@@ -123,7 +138,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   try {
     await Promise.allSettled([
       sendEmail(env.OWNER_EMAIL, `New part request: ${lead.part_needed} (${vehicle})`, ownerHtml, lead.email),
-      sendEmail(lead.email, "We got your part request — Mory's Auto Parts", customerHtml),
+      sendEmail(lead.email, customerSubject, customerHtml),
     ]);
   } catch (e) {
     // Don't fail the request just because email hiccupped — the lead is saved.

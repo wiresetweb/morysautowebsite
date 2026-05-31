@@ -6,33 +6,28 @@ import ContactCta from "../../../components/editorial/sections/ContactCta.astro"
 import ServiceMap from "../../../components/ServiceMap.astro";
 import Icon from "../../../components/Icon.astro";
 import { business, categories, cityPage, ui } from "../../../data/content.ts";
-import {
-  locations,
-  locationSchema,
-  cityPageTitle,
-  cityPageDescription,
-} from "../../../data/seo.ts";
-import { localizePath } from "../../../data/i18n.ts";
+import { locations, locationSchema } from "../../../data/seo.ts";
+import { getLang, localizePath } from "../../../data/i18n.ts";
 
 export function getStaticPaths() {
   return locations.map((loc) => ({ params: { slug: loc.slug }, props: { loc } }));
 }
 
 const { loc } = Astro.props;
-const lang = "es" as const;
-const t = ui.es;
-const cp = cityPage.es;
+const lang = getLang(Astro.url.pathname);
+const t = ui[lang];
+const cp = cityPage[lang];
 const others = locations.filter((l) => l.slug !== loc.slug);
-const cats = categories.es;
-const locCopy = loc.es;
+const cats = categories[lang];
+const locCopy = lang === "es" ? loc.es : loc.en;
 
 const SITE = "https://morysautoparts.com";
 const homePath = localizePath("/", lang);
 const saPath = localizePath("/service-area", lang);
 const cityPath = localizePath(`/service-area/${loc.slug}`, lang);
 
-const title = cityPageTitle(loc, lang);
-const description = cityPageDescription(loc, lang);
+const title = cp.metaTitle(loc.name);
+const description = cp.metaDescription(loc.name, loc.county[lang]);
 
 const breadcrumb = {
   "@context": "https://schema.org",
@@ -62,7 +57,7 @@ const breadcrumb = {
         <div class="grid lg:grid-cols-12 gap-8 lg:items-end" data-reveal>
           <div class="lg:col-span-8">
             <p class="text-[0.7rem] font-bold uppercase tracking-[0.32em] text-brand-navy/70 border-l-4 border-brand-yellow pl-3">
-              {cp.eyebrowPrefix} {loc.county.es}
+              {cp.eyebrowPrefix} {loc.county[lang]}
             </p>
             <h1 class="mt-5 font-condensed font-bold uppercase text-5xl sm:text-6xl lg:text-7xl leading-[0.9] text-brand-navy">
               {cp.h1Prefix}<br />

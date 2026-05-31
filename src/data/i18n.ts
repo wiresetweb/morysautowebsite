@@ -12,16 +12,13 @@ export function getLang(pathname: string): Lang {
   return /^\/es(\/|$)/.test(pathname) ? "es" : "en";
 }
 
-/** Prefixes a path with `/es` when needed. Idempotent. */
+/** Prefixes a path with `/es` when needed. Idempotent in both directions —
+ * calling with `lang="en"` strips an existing `/es` prefix, so this doubles as
+ * the "give me the equivalent path in language X" helper. */
 export function localizePath(path: string, lang: Lang): string {
   const clean = path.replace(/^\/es(?=\/|$)/, "") || "/";
   if (lang === "en") return clean;
   return clean === "/" ? "/es/" : `/es${clean}`;
-}
-
-/** Returns the equivalent path in the other language. */
-export function altPath(pathname: string, target: Lang): string {
-  return localizePath(pathname, target);
 }
 
 /** Strip trailing slash for cleaner alternates (but keep root "/"). */

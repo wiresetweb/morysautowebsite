@@ -6,11 +6,12 @@ import LeadForm from "../../components/editorial/LeadForm.astro";
 import ServiceMap from "../../components/ServiceMap.astro";
 import Icon from "../../components/Icon.astro";
 import { business, contact, hours, ui } from "../../data/content.ts";
-import { localizePath } from "../../data/i18n.ts";
+import { getLang, localizePath } from "../../data/i18n.ts";
 
-const c = contact.es;
-const t = ui.es;
-const homePath = localizePath("/", "es");
+const lang = getLang(Astro.url.pathname);
+const c = contact[lang];
+const t = ui[lang];
+const homePath = localizePath("/", lang);
 ---
 
 <Base title={c.metaTitle} description={c.metaDescription}>
@@ -73,7 +74,7 @@ const homePath = localizePath("/", "es");
               <span class="text-brand-navy mt-0.5"><Icon name="clock" size={22} strokeWidth={1.75} /></span>
               <div>
                 <p class="text-[0.7rem] uppercase tracking-[0.2em] text-brand-navy/60 font-bold">{c.labelHours}</p>
-                <p class="font-condensed font-bold uppercase text-xl text-brand-navy">{hours.es}</p>
+                <p class="font-condensed font-bold uppercase text-xl text-brand-navy">{hours[lang]}</p>
                 <p class="text-xs text-brand-ink/60 font-serif">{c.closedNote}</p>
               </div>
             </div>

@@ -1,12 +1,12 @@
 ---
 import ServiceMap from "../../ServiceMap.astro";
 import Icon from "../../Icon.astro";
-import { serviceCities, sections } from "../../../data/content.ts";
+import { sections } from "../../../data/content.ts";
+import { locations } from "../../../data/seo.ts";
 import { getLang, localizePath } from "../../../data/i18n.ts";
 
 const lang = getLang(Astro.url.pathname);
 const s = sections[lang];
-const cities = serviceCities[lang];
 ---
 
 <section class="bg-brand-cream py-20 lg:py-28 border-b border-brand-navy/15">
@@ -34,14 +34,14 @@ const cities = serviceCities[lang];
           {s.serviceAreaIndexLabel}
         </p>
         <ul class="divide-y divide-brand-navy/15">
-          {cities.map((c) => (
+          {locations.map((l) => (
             <li>
               <a
-                href={localizePath(`/service-area/${c.toLowerCase().replace(/\s+/g, "-")}`, lang)}
+                href={localizePath(`/service-area/${l.slug}`, lang)}
                 class="flex items-center justify-between py-3 group"
               >
                 <span class="font-condensed font-bold uppercase text-lg text-brand-navy tracking-[0.02em] group-hover:text-brand-yellow transition-colors">
-                  {c}
+                  {l.name}
                 </span>
                 <Icon name="arrow-right" size={14} strokeWidth={2} class="text-brand-navy/40 group-hover:text-brand-yellow transition-colors" />
               </a>
