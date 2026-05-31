@@ -38,9 +38,20 @@ const breadcrumb = {
     { "@type": "ListItem", position: 3, name: loc.name, item: `${SITE}${cityPath}` },
   ],
 };
+
+// FAQ rich-result structured data, built from the city's own Q&A.
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: locCopy.faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
 ---
 
-<Base title={title} description={description} jsonLd={[locationSchema(loc, lang), breadcrumb]}>
+<Base title={title} description={description} jsonLd={[locationSchema(loc, lang), breadcrumb, faqSchema]}>
   <Header />
   <main class="flex-1">
     <!-- Hero -->
@@ -146,6 +157,43 @@ const breadcrumb = {
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Local guide — unique, genuinely helpful prose for SEO + visitors -->
+    <section class="bg-brand-cream border-b border-brand-navy/15 py-16 lg:py-20">
+      <div class="mx-auto max-w-3xl px-5 lg:px-8" data-reveal>
+        <p class="text-[0.7rem] font-bold uppercase tracking-[0.32em] text-brand-navy/70 border-l-4 border-brand-yellow pl-3">
+          {cp.guideEyebrow(loc.name)}
+        </p>
+        <h2 class="mt-5 font-condensed font-bold uppercase text-3xl sm:text-4xl text-brand-navy leading-[0.95]">
+          {cp.guideHeading(loc.name)}
+        </h2>
+        <div class="mt-7 space-y-5">
+          {locCopy.body.map((para) => (
+            <p class="text-base sm:text-lg text-brand-ink/85 font-serif leading-relaxed">{para}</p>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ — city-specific, also emitted as FAQPage structured data -->
+    <section class="bg-white border-b border-brand-navy/15 py-16 lg:py-20">
+      <div class="mx-auto max-w-3xl px-5 lg:px-8" data-reveal>
+        <p class="text-[0.7rem] font-bold uppercase tracking-[0.32em] text-brand-navy/70 border-l-4 border-brand-yellow pl-3">
+          {cp.faqEyebrow}
+        </p>
+        <h2 class="mt-5 font-condensed font-bold uppercase text-3xl sm:text-4xl text-brand-navy leading-[0.95]">
+          {cp.faqHeading(loc.name)}
+        </h2>
+        <dl class="mt-8 divide-y divide-brand-navy/15 border-y border-brand-navy/20">
+          {locCopy.faqs.map((f) => (
+            <div class="py-6">
+              <dt class="font-condensed font-bold uppercase text-lg sm:text-xl text-brand-navy tracking-[0.01em]">{f.q}</dt>
+              <dd class="mt-2.5 text-base text-brand-ink/80 font-serif leading-relaxed">{f.a}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
 

@@ -462,6 +462,7 @@ export interface FormCopy {
   disclaimer: string;
   successTitle: string;
   successBody: string;
+  successAgain: string;
   errorTitle: string;
   errorBody: string;
   honeypotLabel: string;
@@ -495,7 +496,8 @@ export const form: Record<Lang, FormCopy> = {
     disclaimer: "No obligation. We'll call or email you back with options and pricing.",
     successTitle: "Request received.",
     successBody:
-      "Thanks — we've got your part request and sent a confirmation to your email. We'll be in touch with options and pricing, usually same week.",
+      "Thanks — we've got your part request and sent a confirmation to your email. We'll be in touch with options and pricing, usually same week. You can close this page; we have what we need.",
+    successAgain: "Need another part? Send another request",
     errorTitle: "Something went wrong.",
     errorBody: `Please try again, or just call us at ${business.phone}.`,
     honeypotLabel: "Leave this blank",
@@ -527,7 +529,8 @@ export const form: Record<Lang, FormCopy> = {
     disclaimer: "Sin compromiso. Te llamamos o te escribimos con opciones y precios.",
     successTitle: "Pedido recibido.",
     successBody:
-      "Gracias — tenemos tu pedido y enviamos una confirmación a tu correo. Te contactamos con opciones y precios, generalmente esa misma semana.",
+      "Gracias — tenemos tu pedido y enviamos una confirmación a tu correo. Te contactamos con opciones y precios, generalmente esa misma semana. Puedes cerrar esta página; ya tenemos lo que necesitamos.",
+    successAgain: "¿Necesitas otra pieza? Envía otro pedido",
     errorTitle: "Algo salió mal.",
     errorBody: `Por favor intenta de nuevo, o simplemente llámanos al ${business.phone}.`,
     honeypotLabel: "Deja esto en blanco",
@@ -778,6 +781,10 @@ export interface CityPageCopy {
   sourceEyebrow: (city: string) => string;
   sourceHeading: string;
   sourceFootnote: (proximity: string, city: string) => string;
+  guideEyebrow: (city: string) => string;
+  guideHeading: (city: string) => string;
+  faqEyebrow: string;
+  faqHeading: (city: string) => string;
   nearbyHeading: (city: string) => string;
   alsoEyebrow: string;
   mapBadge: (city: string) => string;
@@ -797,6 +804,10 @@ export const cityPage: Record<Lang, CityPageCopy> = {
     sourceHeading: "New, used, aftermarket & glass.",
     sourceFootnote: (proximity, city) =>
       `${proximity} Returns are handled case-by-case, and we can refer trusted mechanics and body shops in the ${city} area.`,
+    guideEyebrow: (city) => `Local guide — ${city}`,
+    guideHeading: (city) => `Getting the right part in ${city}`,
+    faqEyebrow: "Questions & answers",
+    faqHeading: (city) => `Common questions from ${city} drivers`,
     nearbyHeading: (city) => `Neighborhoods we cover near ${city}`,
     alsoEyebrow: "Also serving across Miami-Dade & Broward",
     mapBadge: (city) => `Serving ${city}`,
@@ -815,6 +826,10 @@ export const cityPage: Record<Lang, CityPageCopy> = {
     sourceHeading: "Nuevas, usadas, aftermarket y vidrio.",
     sourceFootnote: (proximity, city) =>
       `${proximity} Las devoluciones se manejan caso por caso, y podemos recomendarte mecánicos y body shops de confianza en el área de ${city}.`,
+    guideEyebrow: (city) => `Guía local — ${city}`,
+    guideHeading: (city) => `Cómo conseguir la pieza correcta en ${city}`,
+    faqEyebrow: "Preguntas y respuestas",
+    faqHeading: (city) => `Preguntas comunes de conductores en ${city}`,
     nearbyHeading: (city) => `Barrios que cubrimos cerca de ${city}`,
     alsoEyebrow: "También sirviendo por Miami-Dade y Broward",
     mapBadge: (city) => `Sirviendo a ${city}`,
