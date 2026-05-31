@@ -92,10 +92,40 @@ Re-run if the logo changes.
 - PINs are low-entropy. The login route does constant-time comparison + KV lockout (above). Add a WAF rule and/or Turnstile before launch for extra safety.
 - `.dev.vars` is gitignored — never commit real secrets.
 
+## Staging deployment (Phase 2 — live)
+
+Cloudflare Pages project **`morys-auto`** → **https://morys-auto.pages.dev**
+(git-connected to `wiresetweb/morysautowebsite`, production branch
+`claude/morys-phase-2-staging-QeYvd`, build `npm run build` → `dist`).
+
+- **Supabase staging:** project ref `pcztmgpugfztkqybqkml`. `public.leads`
+  with RLS on, 0 policies. Live lead flow verified end-to-end (form → function
+  → row in `leads`). Admin login + `/admin/leads` verified.
+- **Env vars** (all encrypted, on production + preview): `SUPABASE_URL`,
+  `SUPABASE_SERVICE_ROLE_KEY`, `STAFF_PIN_HASH`, `SESSION_SECRET`,
+  `RESEND_API_KEY`, `FROM_EMAIL`, `OWNER_EMAIL`.
+- **KV:** namespace `mory-login-rl` bound as `LOGIN_RL` (staff-login rate limit).
+- **Staff PIN (staging): `4821`** — rotate before launch via
+  `npm run staff:pin -- <pin> <session-secret>`, then update `STAFF_PIN_HASH`.
+- Deploys are triggered via the Cloudflare API/dashboard (the API-created
+  project doesn't auto-build on push in this setup; push then trigger a
+  deployment, or connect the build webhook in the dashboard).
+
+### Open item — email is NOT delivering yet (intentional, deferred)
+
+`FROM_EMAIL` is `onboarding@resend.dev` (Resend's sandbox sender), which only
+delivers to the Resend account's own address — so confirmation/notification
+emails fail silently while the DB insert still succeeds. **To enable real
+email:** verify a sending domain on Resend (e.g. `send.wiresetweb.com` for
+staging, or `morysautoparts.com` at launch), add the DKIM/SPF/MX DNS records,
+then set `FROM_EMAIL` to an address on that domain and redeploy. A real
+`RESEND_API_KEY` is already in place.
+
 ## Still to wire (future passes)
 
 - **Leads inbox** is built (`/admin/leads`); **P&L tool** still pending Alex's spec.
-- Spanish (`/es/`) routes — content is English-only for now.
+- Spanish (`/es/`) routes are live and indexed (sitemap + hreflang). Owner
+  review of the translations is still worthwhile before launch.
 - Real photos (see ratios noted in each `PhotoPlaceholder`).
 - Curated Google reviews live in `src/data/content.ts` (`reviews`) — swap in real ones.
 - Local note: don't pass `--outfile=/tmp/_worker.js` to wrangler; it treats `_worker.js` as a special name and a stale one poisons later builds.
