@@ -55,7 +55,7 @@ export const hero: Record<Lang, HeroCopy> = {
       "New, used, and aftermarket parts — sourced from a network we've built over years on the ground in Hialeah. Hard-to-find is our specialty.",
     howLabel: "How to order",
     howBody:
-      "Call the shop with year, make, model, and the part. We source it from the network, quote the options, and have it ready that week.",
+      "Call the shop with year, make, model, and the part. We source it from the network, quote the options, and most parts come in within two to four days.",
     figCaption: "A real shop, in real Hialeah.",
   },
   es: {
@@ -72,7 +72,7 @@ export const hero: Record<Lang, HeroCopy> = {
       "Piezas nuevas, usadas y aftermarket — de una red de proveedores construida durante años en Hialeah. Lo difícil de conseguir es nuestra especialidad.",
     howLabel: "Cómo pedir",
     howBody:
-      "Llama a la tienda con el año, marca, modelo y la pieza. La buscamos en la red, te damos las opciones con precio, y la tenemos esa misma semana.",
+      "Llama a la tienda con el año, marca, modelo y la pieza. La buscamos en la red, te damos las opciones con precio, y la mayoría de las piezas llegan en dos a cuatro días.",
     figCaption: "Una tienda de verdad, en Hialeah de verdad.",
   },
 };
@@ -100,7 +100,7 @@ export const reviews: Record<Lang, Review[]> = {
     },
     {
       quote:
-        "Got me an aftermarket fender at half what the dealer quoted. Picked it up same week. I've been sending family here ever since.",
+        "Got me an aftermarket fender at half what the dealer quoted. Picked it up a couple days later. I've been sending family here ever since.",
       name: "Devon T.",
       location: "Opa-Locka",
     },
@@ -120,7 +120,7 @@ export const reviews: Record<Lang, Review[]> = {
     },
     {
       quote:
-        "Me consiguió un guardafango aftermarket a la mitad de lo que cotizó el dealer. Lo recogí esa misma semana. Desde entonces mando a toda la familia aquí.",
+        "Me consiguió un guardafango aftermarket a la mitad de lo que cotizó el dealer. Lo recogí un par de días después. Desde entonces mando a toda la familia aquí.",
       name: "Devon T.",
       location: "Opa-Locka",
     },
@@ -262,13 +262,13 @@ export const stats: Record<Lang, Stat[]> = {
     { value: "South FL", label: "Where we serve" },
     { value: "EN / ES", label: "Spoken at the counter" },
     { value: "Mon–Fri", label: "Open 9 to 5" },
-    { value: "Same week", label: "Typical sourcing time" },
+    { value: "2–4 days", label: "Typical sourcing time" },
   ],
   es: [
     { value: "Sur FL", label: "Donde servimos" },
     { value: "EN / ES", label: "En el mostrador" },
     { value: "Lun–Vie", label: "Abierto 9 a 5" },
-    { value: "Misma semana", label: "Tiempo típico de búsqueda" },
+    { value: "2–4 días", label: "Tiempo típico de búsqueda" },
   ],
 };
 
@@ -408,7 +408,7 @@ export const contact: Record<Lang, ContactCopy> = {
     h1Line1: "Tell us what",
     h1Line2: "your car needs.",
     intro:
-      "Fill out the part request below or just call the shop. We'll work our network, find your options, and get back to you with real prices — usually same week.",
+      "Fill out the part request below or just call the shop. We'll work our network, find your options, and get back to you with real prices — usually within two to four days.",
     labelCall: "Call",
     labelEmail: "Email",
     labelVisit: "Visit",
@@ -424,7 +424,7 @@ export const contact: Record<Lang, ContactCopy> = {
     h1Line1: "Dinos qué",
     h1Line2: "necesita tu carro.",
     intro:
-      "Llena el pedido de pieza aquí abajo o simplemente llama a la tienda. Movemos nuestra red, encontramos tus opciones, y te respondemos con precios reales — generalmente esa misma semana.",
+      "Llena el pedido de pieza aquí abajo o simplemente llama a la tienda. Movemos nuestra red, encontramos tus opciones, y te respondemos con precios reales — generalmente en dos a cuatro días.",
     labelCall: "Llama",
     labelEmail: "Correo",
     labelVisit: "Visita",
@@ -496,7 +496,7 @@ export const form: Record<Lang, FormCopy> = {
     disclaimer: "No obligation. We'll call or email you back with options and pricing.",
     successTitle: "Request received.",
     successBody:
-      "Thanks — we've got your part request and sent a confirmation to your email. We'll be in touch with options and pricing, usually same week. You can close this page; we have what we need.",
+      "Thanks — we've got your part request and sent a confirmation to your email. We'll be in touch with options and pricing, usually within two to four days. You can close this page; we have what we need.",
     successAgain: "Need another part? Send another request",
     errorTitle: "Something went wrong.",
     errorBody: `Please try again, or just call us at ${business.phone}.`,
@@ -529,7 +529,7 @@ export const form: Record<Lang, FormCopy> = {
     disclaimer: "Sin compromiso. Te llamamos o te escribimos con opciones y precios.",
     successTitle: "Pedido recibido.",
     successBody:
-      "Gracias — tenemos tu pedido y enviamos una confirmación a tu correo. Te contactamos con opciones y precios, generalmente esa misma semana. Puedes cerrar esta página; ya tenemos lo que necesitamos.",
+      "Gracias — tenemos tu pedido y enviamos una confirmación a tu correo. Te contactamos con opciones y precios, generalmente en dos a cuatro días. Puedes cerrar esta página; ya tenemos lo que necesitamos.",
     successAgain: "¿Necesitas otra pieza? Envía otro pedido",
     errorTitle: "Algo salió mal.",
     errorBody: `Por favor intenta de nuevo, o simplemente llámanos al ${business.phone}.`,
@@ -670,7 +670,7 @@ export const sections: Record<Lang, SectionsCopy> = {
     ctaHeadingLine2: "search.",
     ctaHeadingAccent: "Just call us.",
     ctaBlurb:
-      "Tell us the year, make, model, and the part. We'll do the rest and call you back with real options — same week, fair price, no run-around.",
+      "Tell us the year, make, model, and the part. We'll do the rest and call you back with real options — usually within two to four days, fair price, no run-around.",
     ctaSecondary: "Send a part request",
     ctaVisit: "Visit",
     ctaHours: "Hours",
@@ -712,7 +712,7 @@ export const sections: Record<Lang, SectionsCopy> = {
     ctaHeadingLine2: "búsqueda.",
     ctaHeadingAccent: "Llámanos.",
     ctaBlurb:
-      "Dinos el año, marca, modelo y la pieza. Nosotros hacemos el resto y te llamamos de vuelta con opciones reales — misma semana, precio justo, sin vueltas.",
+      "Dinos el año, marca, modelo y la pieza. Nosotros hacemos el resto y te llamamos de vuelta con opciones reales — generalmente en dos a cuatro días, precio justo, sin vueltas.",
     ctaSecondary: "Enviar pedido de pieza",
     ctaVisit: "Visita",
     ctaHours: "Horario",

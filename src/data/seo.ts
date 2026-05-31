@@ -109,7 +109,7 @@ export const locations: Location[] = [
       intro:
         "Mory's has been Hialeah's go-to for hard-to-find car parts for years. Walk in off E 10th Ave, call ahead, or send a part request — new, used, or aftermarket, we'll track it down and quote you straight. Bilingual service, fair pricing, no run-around.",
       body: [
-        "Hialeah is our backyard. The shop has sat on E 10th Ave for over twenty years, so when a Hialeah driver needs a part there's no waiting on shipping or guessing at fitment — most of the time you can swing by the counter the same day, and we've usually started working the phones before you arrive. We see the cars this city actually runs on: high-mileage Hondas and Toyotas, work trucks that can't sit idle, and family sedans someone's trying to get one more year out of.",
+        "Hialeah is our backyard. The shop has sat on E 10th Ave for over twenty years, so when a Hialeah driver needs a part there's no long wait on shipping and no guessing at fitment — you can swing by the counter to talk it through in person, and we've usually started working the phones before you arrive. We see the cars this city actually runs on: high-mileage Hondas and Toyotas, work trucks that can't sit idle, and family sedans someone's trying to get one more year out of.",
         "Because we're local, pickup is simple and so is a straight conversation about what's worth fixing. Give us the year, make, model, and the part, and we'll quote new, used, and aftermarket side by side so you can decide with real numbers in front of you — not a padded estimate. And if a cheaper option is the smarter call, we'll tell you. Everything happens in English or Spanish, whichever is easier.",
       ],
       faqs: [
@@ -123,7 +123,7 @@ export const locations: Location[] = [
         },
         {
           q: "What if the part isn't in stock?",
-          a: "Most parts aren't sitting on a shelf anywhere — they get sourced. Give us the details and we work our suppliers and salvage contacts, usually coming back with options the same week.",
+          a: "Most parts aren't sitting on a shelf anywhere — they get sourced. Give us the details and we work our suppliers and salvage contacts, usually coming back with options in two to four days, with some exceptions.",
         },
       ],
       keywords: [
@@ -139,7 +139,7 @@ export const locations: Location[] = [
       intro:
         "Mory's lleva años siendo el sitio en Hialeah para las piezas de carro difíciles de encontrar. Entra por E 10th Ave, llama antes, o envía un pedido — nuevas, usadas o aftermarket, las rastreamos y te damos un precio directo. Servicio bilingüe, precios justos, sin vueltas.",
       body: [
-        "Hialeah es nuestra casa. La tienda lleva más de veinte años en E 10th Ave, así que cuando un conductor de Hialeah necesita una pieza no hay que esperar envíos ni adivinar si encaja — la mayoría de las veces pasas por el mostrador el mismo día, y normalmente ya empezamos a mover los teléfonos antes de que llegues. Conocemos los carros que mueve esta ciudad: Hondas y Toyotas con millas, camionetas de trabajo que no pueden parar, y carros de familia a los que alguien le quiere sacar un año más.",
+        "Hialeah es nuestra casa. La tienda lleva más de veinte años en E 10th Ave, así que cuando un conductor de Hialeah necesita una pieza no hay que esperar envíos largos ni adivinar si encaja — puedes pasar por el mostrador a hablarlo en persona, y normalmente ya empezamos a mover los teléfonos antes de que llegues. Conocemos los carros que mueve esta ciudad: Hondas y Toyotas con millas, camionetas de trabajo que no pueden parar, y carros de familia a los que alguien le quiere sacar un año más.",
         "Como somos de aquí, recoger es fácil y también lo es una conversación honesta sobre qué vale la pena arreglar. Danos el año, marca, modelo y la pieza, y te cotizamos nueva, usada y aftermarket lado a lado para que decidas con números reales delante — no un estimado inflado. Y si la opción más barata es la más inteligente, te lo decimos. Todo en inglés o español, como te quede mejor.",
       ],
       faqs: [
@@ -153,7 +153,7 @@ export const locations: Location[] = [
         },
         {
           q: "¿Qué pasa si no tienen la pieza en inventario?",
-          a: "Casi ninguna pieza está esperando en un estante — se busca. Danos los detalles y movemos nuestros proveedores y contactos de yonker, normalmente con opciones esa misma semana.",
+          a: "Casi ninguna pieza está esperando en un estante — se busca. Danos los detalles y movemos nuestros proveedores y contactos de yonker, normalmente con opciones en dos a cuatro días, con algunas excepciones.",
         },
       ],
       keywords: [
@@ -173,10 +173,10 @@ export const locations: Location[] = [
     en: {
       proximity: "A short hop south from our Hialeah shop.",
       intro:
-        "Sourcing parts for a car in Miami? We pull from a supplier and salvage network across the metro and have most parts ready the same week. New, used, and aftermarket — plus auto glass — at prices that beat the dealership. Hablamos español.",
+        "Sourcing parts for a car in Miami? We pull from a supplier and salvage network across the metro and have most parts ready within two to four days. New, used, and aftermarket — plus auto glass — at prices that beat the dealership. Hablamos español.",
       body: [
         "Mory's is a short drive north of the City of Miami, and we pull parts for drivers all across it — from Little Havana and Allapattah to Brownsville and Liberty City. Miami runs on every kind of car, which is exactly why a sourcing network beats a fixed shelf: instead of hoping one store happens to stock your part, we work suppliers and salvage yards across the metro until we find the right one at the right price.",
-        "For most Miami orders we can have parts ready the same week, and depending on the size of the order we can arrange delivery instead of making you fight traffic up to Hialeah. New, used, aftermarket, and auto glass all run through the same process — you tell us what the car needs, we lay out the real options and what each one actually costs.",
+        "For most Miami orders we can have parts ready within two to four days, and depending on the size of the order we can arrange delivery instead of making you fight traffic up to Hialeah. New, used, aftermarket, and auto glass all run through the same process — you tell us what the car needs, we lay out the real options and what each one actually costs.",
       ],
       faqs: [
         {
@@ -203,10 +203,10 @@ export const locations: Location[] = [
     es: {
       proximity: "Un brinco al sur desde nuestra tienda en Hialeah.",
       intro:
-        "¿Buscando piezas para un carro en Miami? Sacamos de una red de proveedores y yonkers por todo el metro y tenemos casi todas las piezas listas esa misma semana. Nuevas, usadas y aftermarket — más vidrio automotriz — a precios que le ganan al dealer. We speak English.",
+        "¿Buscando piezas para un carro en Miami? Sacamos de una red de proveedores y yonkers por todo el metro y tenemos casi todas las piezas listas en dos a cuatro días. Nuevas, usadas y aftermarket — más vidrio automotriz — a precios que le ganan al dealer. We speak English.",
       body: [
         "Mory's queda a un viaje corto al norte de la Ciudad de Miami, y conseguimos piezas para conductores por toda ella — desde Little Havana y Allapattah hasta Brownsville y Liberty City. Por Miami rueda todo tipo de carro, y por eso una red de búsqueda le gana a un estante fijo: en vez de esperar que una sola tienda tenga tu pieza, movemos proveedores y yonkers por todo el metro hasta dar con la correcta al precio correcto.",
-        "Para casi todas las órdenes de Miami tenemos la pieza esa misma semana, y según el tamaño de la orden podemos coordinar entrega en vez de hacerte pelear con el tráfico hasta Hialeah. Nuevas, usadas, aftermarket y vidrio automotriz pasan por el mismo proceso — nos dices qué necesita el carro y te ponemos las opciones reales con lo que cuesta cada una.",
+        "Para casi todas las órdenes de Miami tenemos la pieza en dos a cuatro días, y según el tamaño de la orden podemos coordinar entrega en vez de hacerte pelear con el tráfico hasta Hialeah. Nuevas, usadas, aftermarket y vidrio automotriz pasan por el mismo proceso — nos dices qué necesita el carro y te ponemos las opciones reales con lo que cuesta cada una.",
       ],
       faqs: [
         {
@@ -247,7 +247,7 @@ export const locations: Location[] = [
       faqs: [
         {
           q: "How far is the shop from Hialeah Gardens?",
-          a: "Just a few minutes east on W 49th St. Most Hialeah Gardens customers pick up at our counter on E 10th Ave the same week — often the same day.",
+          a: "Just a few minutes east on W 49th St. Most Hialeah Gardens customers pick up at our counter on E 10th Ave once the part's in — usually within two to four days.",
         },
         {
           q: "Can you find parts for older cars?",
@@ -275,7 +275,7 @@ export const locations: Location[] = [
       faqs: [
         {
           q: "¿Qué tan lejos está la tienda de Hialeah Gardens?",
-          a: "A solo unos minutos al este por la W 49th St. La mayoría de los clientes de Hialeah Gardens recogen en nuestro mostrador en E 10th Ave esa misma semana — muchas veces el mismo día.",
+          a: "A solo unos minutos al este por la W 49th St. La mayoría de los clientes de Hialeah Gardens recogen en nuestro mostrador en E 10th Ave cuando llega la pieza — generalmente en dos a cuatro días.",
         },
         {
           q: "¿Consiguen piezas para carros viejos?",
@@ -317,7 +317,7 @@ export const locations: Location[] = [
         },
         {
           q: "How long does sourcing take?",
-          a: "Most parts come back with options the same week — sometimes the same day, depending on what it is and where it's coming from.",
+          a: "Most parts come back with options in two to four days, depending on what it is and where it's coming from — some exceptions take a little longer.",
         },
       ],
       keywords: [
@@ -345,7 +345,7 @@ export const locations: Location[] = [
         },
         {
           q: "¿Cuánto demora la búsqueda?",
-          a: "Casi todas las piezas regresan con opciones esa misma semana — a veces el mismo día, según qué sea y de dónde venga.",
+          a: "Casi todas las piezas regresan con opciones en dos a cuatro días, según qué sea y de dónde venga — algunas excepciones toman un poco más.",
         },
       ],
       keywords: [
@@ -441,7 +441,7 @@ export const locations: Location[] = [
         },
         {
           q: "How do I get a quote?",
-          a: "Call the shop or send a part request with your year, make, model, and the part. We'll get back to you with options and pricing, usually the same week.",
+          a: "Call the shop or send a part request with your year, make, model, and the part. We'll get back to you with options and pricing, usually within two to four days.",
         },
       ],
       keywords: [
@@ -469,7 +469,7 @@ export const locations: Location[] = [
         },
         {
           q: "¿Cómo pido una cotización?",
-          a: "Llama a la tienda o envía un pedido con tu año, marca, modelo y la pieza. Te respondemos con opciones y precios, generalmente esa misma semana.",
+          a: "Llama a la tienda o envía un pedido con tu año, marca, modelo y la pieza. Te respondemos con opciones y precios, generalmente en dos a cuatro días.",
         },
       ],
       keywords: [
@@ -499,7 +499,7 @@ export const locations: Location[] = [
         },
         {
           q: "How close is the shop to Fontainebleau?",
-          a: "Just north near the Palmetto — a short drive. Most Fontainebleau customers pick up the same week, often the same day.",
+          a: "Just north near the Palmetto — a short drive. Most Fontainebleau customers pick up once the part comes in, usually within two to four days.",
         },
         {
           q: "Can you find hard-to-find parts?",
@@ -527,7 +527,7 @@ export const locations: Location[] = [
         },
         {
           q: "¿Qué tan cerca está la tienda de Fontainebleau?",
-          a: "Justo al norte cerca del Palmetto — un viaje corto. La mayoría de los clientes de Fontainebleau recogen esa misma semana, muchas veces el mismo día.",
+          a: "Justo al norte cerca del Palmetto — un viaje corto. La mayoría de los clientes de Fontainebleau recogen cuando llega la pieza, generalmente en dos a cuatro días.",
         },
         {
           q: "¿Consiguen piezas difíciles de encontrar?",
