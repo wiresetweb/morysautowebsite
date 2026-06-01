@@ -1,0 +1,419 @@
+---
+import AdminLayout from "../../../layouts/AdminLayout.astro";
+import Icon from "../../../components/Icon.astro";
+import {
+  REVENUE_FIELDS,
+  COGS_INPUT_FIELDS,
+  FIXED_FIELDS,
+  VARIABLE_FIELDS,
+} from "../../../lib/pnl.ts";
+
+const inputRow = "flex items-center justify-between gap-4 py-2 border-b border-white/[0.06] last:border-0";
+---
+
+<AdminLayout title="Weekly P&L">
+  <header class="border-b border-white/10 no-print">
+    <div class="mx-auto max-w-5xl px-5 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/admin" class="flex items-center gap-3">
+          <img src="/morys_logo.png" alt="" width="28" height="28" class="w-7 h-7 object-contain" />
+          <span class="font-condensed font-bold uppercase text-2xl tracking-[0.04em]">Mory's</span>
+        </a>
+        <span class="text-[0.62rem] uppercase tracking-[0.24em] text-brand-yellow font-bold">P&amp;L</span>
+      </div>
+      <nav class="flex items-center gap-6 text-sm font-semibold uppercase tracking-wider">
+        <a href="/admin" class="text-white/70 hover:text-brand-yellow transition-colors">Dashboard</a>
+        <a href="/admin/pnl/history" class="text-white/70 hover:text-brand-yellow transition-colors">History</a>
+        <button id="logout" class="text-white/70 hover:text-brand-yellow transition-colors inline-flex items-center gap-1">
+          Log out <Icon name="arrow-up-right" size={14} strokeWidth={2.25} />
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="sheet" class="mx-auto max-w-5xl px-5 lg:px-8 py-10">
+    <!-- Print-only masthead -->
+    <div class="print-only mb-6">
+      <p class="font-condensed font-bold uppercase text-3xl">Mory's Auto Parts &amp; Glass</p>
+      <p class="text-sm">Weekly Profit &amp; Loss</p>
+    </div>
+
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="text-[0.7rem] font-bold uppercase tracking-[0.3em] text-brand-yellow no-print">Profit &amp; Loss</p>
+        <h1 class="mt-2 font-condensed font-bold uppercase text-4xl sm:text-5xl">Weekly entry</h1>
+        <p id="week-range" class="mt-2 text-white/60 text-sm"></p>
+      </div>
+      <div class="flex items-end gap-3 no-print">
+        <label class="block">
+          <span class="block text-[0.62rem] uppercase tracking-[0.2em] text-white/50 font-bold mb-1">Week of (Mon)</span>
+          <input id="week" type="date" class="bg-white/[0.04] border border-white/15 px-3 py-2 text-white focus:outline-none focus:border-brand-yellow" />
+        </label>
+      </div>
+    </div>
+
+    <!-- Status banner -->
+    <div id="status" class="hidden mt-6 border px-4 py-3 text-sm font-semibold"></div>
+
+    <div class="mt-8 grid lg:grid-cols-2 gap-6">
+      <!-- Revenue -->
+      <section class="pnl-card border border-white/12 bg-white/[0.03] p-6 print-section">
+        <h2 class="font-condensed font-bold uppercase text-xl tracking-wide text-brand-yellow">Revenue</h2>
+        <div class="mt-4">
+          {REVENUE_FIELDS.map((f) => (
+            <label class={inputRow}>
+              <span class="text-sm text-white/80">{f.label}</span>
+              <span class="relative shrink-0">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">$</span>
+                <input type="number" step="0.01" min="0" inputmode="decimal" data-field={f.key}
+                  class="pnl-input w-36 bg-white/[0.04] border border-white/15 pl-7 pr-3 py-2 text-right tabular-nums text-white focus:outline-none focus:border-brand-yellow" placeholder="0.00" />
+              </span>
+            </label>
+          ))}
+          <div class="flex items-center justify-between gap-4 pt-3 mt-1 border-t border-white/15">
+            <span class="font-bold uppercase text-sm tracking-wide">Total revenue</span>
+            <span id="t-revenue" class="font-bold tabular-nums text-lg">$0.00</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- COGS -->
+      <section class="pnl-card border border-white/12 bg-white/[0.03] p-6 print-section">
+        <h2 class="font-condensed font-bold uppercase text-xl tracking-wide text-brand-yellow">Cost of goods sold</h2>
+        <div class="mt-4">
+          {COGS_INPUT_FIELDS.map((f) => (
+            <label class={inputRow}>
+              <span class="text-sm text-white/80">{f.label}</span>
+              <span class="relative shrink-0">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">$</span>
+                <input type="number" step="0.01" min="0" inputmode="decimal" data-field={f.key}
+                  class="pnl-input w-36 bg-white/[0.04] border border-white/15 pl-7 pr-3 py-2 text-right tabular-nums text-white focus:outline-none focus:border-brand-yellow" placeholder="0.00" />
+              </span>
+            </label>
+          ))}
+          <!-- Derived eBay COGS (estimate) -->
+          <div class={inputRow}>
+            <span class="est-line text-sm italic text-brand-yellow">eBay COGS — est. 65% of eBay gross</span>
+            <span id="t-ebay-cogs" class="est-line text-sm italic tabular-nums text-brand-yellow shrink-0">$0.00</span>
+          </div>
+          <div class="flex items-center justify-between gap-4 pt-3 mt-1 border-t border-white/15">
+            <span class="font-bold uppercase text-sm tracking-wide">Total COGS</span>
+            <span id="t-cogs" class="font-bold tabular-nums text-lg">$0.00</span>
+          </div>
+          <div class="flex items-center justify-between gap-4 pt-2">
+            <span class="text-sm text-white/80">Gross profit <span class="text-white/45">·</span> <span id="t-gross-margin" class="text-white/60">0.0%</span></span>
+            <span id="t-gross" class="font-bold tabular-nums">$0.00</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Operating expenses -->
+    <section class="pnl-card mt-6 border border-white/12 bg-white/[0.03] p-6 print-section">
+      <h2 class="font-condensed font-bold uppercase text-xl tracking-wide text-brand-yellow">Operating expenses</h2>
+      <div class="mt-4 grid lg:grid-cols-2 gap-x-10 gap-y-1">
+        <!-- Fixed -->
+        <div>
+          <p class="text-[0.62rem] uppercase tracking-[0.2em] text-white/45 font-bold mb-1">Fixed</p>
+          {FIXED_FIELDS.map((f) => (
+            <label class={inputRow}>
+              <span class="text-sm text-white/80">{f.label}</span>
+              <span class="relative shrink-0">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">$</span>
+                <input type="number" step="0.01" min="0" inputmode="decimal" data-field={f.key}
+                  class="pnl-input w-32 bg-white/[0.04] border border-white/15 pl-7 pr-3 py-2 text-right tabular-nums text-white focus:outline-none focus:border-brand-yellow" placeholder="0.00" />
+              </span>
+            </label>
+          ))}
+          <div class="flex items-center justify-between gap-4 pt-2 mt-1 border-t border-white/15">
+            <span class="text-sm font-bold uppercase tracking-wide">Total fixed</span>
+            <span id="t-fixed" class="font-bold tabular-nums">$0.00</span>
+          </div>
+        </div>
+        <!-- Variable -->
+        <div>
+          <p class="text-[0.62rem] uppercase tracking-[0.2em] text-white/45 font-bold mb-1">Variable</p>
+          {VARIABLE_FIELDS.map((f) => (
+            <label class={inputRow}>
+              <span class="text-sm text-white/80">{f.label}</span>
+              <span class="relative shrink-0">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">$</span>
+                <input type="number" step="0.01" min="0" inputmode="decimal" data-field={f.key}
+                  class="pnl-input w-32 bg-white/[0.04] border border-white/15 pl-7 pr-3 py-2 text-right tabular-nums text-white focus:outline-none focus:border-brand-yellow" placeholder="0.00" />
+              </span>
+            </label>
+          ))}
+          <div class="flex items-center justify-between gap-4 pt-2 mt-1 border-t border-white/15">
+            <span class="text-sm font-bold uppercase tracking-wide">Total variable</span>
+            <span id="t-variable" class="font-bold tabular-nums">$0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dynamic extra expenses -->
+      <div class="mt-6 pt-5 border-t border-white/10">
+        <div class="flex items-center justify-between">
+          <p class="text-[0.62rem] uppercase tracking-[0.2em] text-white/45 font-bold">Additional expenses</p>
+          <button id="add-extra" class="no-print inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-brand-yellow border border-brand-yellow/40 px-3 py-1.5 hover:bg-brand-yellow hover:text-brand-navy transition-colors">
+            <Icon name="package" size={13} strokeWidth={2.25} /> Add expense
+          </button>
+        </div>
+        <div id="extras" class="mt-3 space-y-2"></div>
+        <p id="extras-empty" class="text-xs text-white/35 italic mt-2">No additional expenses for this week.</p>
+      </div>
+
+      <div class="flex items-center justify-between gap-4 pt-4 mt-4 border-t border-white/15">
+        <span class="font-bold uppercase text-sm tracking-wide">Total operating expenses</span>
+        <span id="t-opex" class="font-bold tabular-nums text-lg">$0.00</span>
+      </div>
+    </section>
+
+    <!-- Bottom line -->
+    <section class="pnl-card mt-6 border border-brand-yellow/30 bg-brand-yellow/[0.06] p-6 print-section">
+      <div class="grid sm:grid-cols-3 gap-6 items-end">
+        <div>
+          <p class="text-[0.62rem] uppercase tracking-[0.2em] text-white/55 font-bold">Net profit</p>
+          <p id="t-net" class="mt-1 font-condensed font-bold tabular-nums text-4xl sm:text-5xl">$0.00</p>
+        </div>
+        <div>
+          <p class="text-[0.62rem] uppercase tracking-[0.2em] text-white/55 font-bold">Net margin</p>
+          <p id="t-net-margin" class="mt-1 font-condensed font-bold tabular-nums text-2xl">0.0%</p>
+        </div>
+        <div>
+          <p class="text-[0.62rem] uppercase tracking-[0.2em] text-white/55 font-bold">Gross profit</p>
+          <p id="t-gross-2" class="mt-1 font-condensed font-bold tabular-nums text-2xl">$0.00</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Note -->
+    <section class="mt-6 print-section">
+      <label class="block">
+        <span class="block text-[0.62rem] uppercase tracking-[0.2em] text-white/45 font-bold mb-2">Notes (optional)</span>
+        <textarea id="note" rows="2" class="w-full bg-white/[0.04] border border-white/15 px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-yellow" placeholder="Anything worth remembering about this week."></textarea>
+      </label>
+    </section>
+
+    <!-- Actions -->
+    <div class="mt-8 flex flex-wrap items-center gap-3 no-print">
+      <button id="save" class="inline-flex items-center justify-center gap-2 bg-brand-yellow text-brand-navy font-bold uppercase tracking-wide px-7 py-3.5 hover:opacity-90 transition-opacity disabled:opacity-60">
+        <span class="save-label">Save week</span>
+        <span class="save-spinner hidden">Saving…</span>
+      </button>
+      <button id="print" class="inline-flex items-center gap-2 border border-white/25 text-white/80 font-semibold uppercase tracking-wide px-5 py-3.5 hover:border-brand-yellow transition-colors">
+        Print
+      </button>
+      <button id="delete" class="hidden ml-auto text-sm text-white/45 hover:text-brand-red transition-colors">Delete this week</button>
+    </div>
+  </main>
+
+  <style is:global>
+    .print-only { display: none; }
+    @media print {
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      body { background: #fff !important; }
+      #sheet, #sheet * { color: #000 !important; }
+      #sheet .est-line { color: #555 !important; font-style: italic; }
+      .pnl-card { background: #fff !important; border-color: #bbb !important; break-inside: avoid; }
+      .pnl-input {
+        border: none !important; background: transparent !important;
+        padding: 0 0.25rem 0 0 !important; width: auto !important; -moz-appearance: textfield;
+      }
+      .pnl-input::-webkit-outer-spin-button, .pnl-input::-webkit-inner-spin-button { display: none; }
+      @page { margin: 0.5in; }
+    }
+  </style>
+
+  <script>
+    import {
+      compute, emptyWeek, centsToInput, dollarsToCents, fmtMoney, fmtPct,
+      mondayOfIso, currentMonday, weekRangeLabel, NUMERIC_KEYS,
+      type PnlWeek, type ExtraExpense, type ExpenseKind,
+    } from "../../../lib/pnl.ts";
+
+    const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
+
+    const weekInput = $<HTMLInputElement>("week");
+    const extrasBox = $("extras");
+    const noteInput = $<HTMLTextAreaElement>("note");
+
+    function fieldInputs(): HTMLInputElement[] {
+      return Array.from(document.querySelectorAll<HTMLInputElement>("input[data-field]"));
+    }
+
+    function setStatus(msg: string, kind: "ok" | "err" | "info" = "info") {
+      const el = $("status");
+      const styles = {
+        ok: "border-green-400/40 bg-green-400/10 text-green-300",
+        err: "border-brand-red/50 bg-brand-red/10 text-brand-red",
+        info: "border-white/20 bg-white/5 text-white/70",
+      };
+      el.className = `mt-6 border px-4 py-3 text-sm font-semibold ${styles[kind]}`;
+      el.textContent = msg;
+      el.classList.remove("hidden");
+    }
+    function clearStatus() { $("status").classList.add("hidden"); }
+
+    // --- Extra expense rows (DOM is the source of truth, to keep focus) ---
+    function addExtraRow(name = "", kind: ExpenseKind = "variable", amountCents = 0) {
+      const wrap = document.createElement("div");
+      wrap.className = "extra-row flex items-center gap-2";
+      wrap.innerHTML = `
+        <input type="text" maxlength="60" placeholder="Expense name" value="${name.replace(/"/g, "&quot;")}"
+          class="x-name flex-1 bg-white/[0.04] border border-white/15 px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-yellow" />
+        <select class="x-kind bg-white/[0.04] border border-white/15 px-2 py-2 text-sm text-white focus:outline-none focus:border-brand-yellow no-print">
+          <option value="variable"${kind === "variable" ? " selected" : ""}>Variable</option>
+          <option value="fixed"${kind === "fixed" ? " selected" : ""}>Fixed</option>
+        </select>
+        <span class="relative shrink-0">
+          <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/40 text-sm">$</span>
+          <input type="number" step="0.01" min="0" inputmode="decimal" value="${amountCents ? centsToInput(amountCents) : ""}"
+            class="x-amount w-28 bg-white/[0.04] border border-white/15 pl-6 pr-2 py-2 text-right tabular-nums text-white focus:outline-none focus:border-brand-yellow" placeholder="0.00" />
+        </span>
+        <button type="button" class="x-remove no-print text-white/40 hover:text-brand-red px-1" aria-label="Remove">&times;</button>`;
+      extrasBox.appendChild(wrap);
+      wrap.querySelectorAll("input,select").forEach((el) => el.addEventListener("input", render));
+      wrap.querySelector(".x-remove")!.addEventListener("click", () => { wrap.remove(); render(); });
+      $("extras-empty").classList.add("hidden");
+    }
+
+    function gatherExtras(): ExtraExpense[] {
+      return Array.from(document.querySelectorAll<HTMLElement>(".extra-row")).map((row) => ({
+        name: (row.querySelector(".x-name") as HTMLInputElement).value.trim(),
+        kind: ((row.querySelector(".x-kind") as HTMLSelectElement).value === "fixed" ? "fixed" : "variable") as ExpenseKind,
+        amount_cents: dollarsToCents((row.querySelector(".x-amount") as HTMLInputElement).value),
+      })).filter((e) => e.name);
+    }
+
+    function gather(): PnlWeek {
+      const w = emptyWeek(weekInput.value);
+      for (const inp of fieldInputs()) {
+        (w as Record<string, unknown>)[inp.dataset.field!] = dollarsToCents(inp.value);
+      }
+      w.extra_expenses = gatherExtras();
+      w.note = noteInput.value;
+      return w;
+    }
+
+    function render() {
+      const t = compute(gather());
+      const set = (id: string, v: string) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      set("t-revenue", fmtMoney(t.totalRevenue));
+      set("t-ebay-cogs", fmtMoney(t.ebayCogs));
+      set("t-cogs", fmtMoney(t.totalCogs));
+      set("t-gross", fmtMoney(t.grossProfit));
+      set("t-gross-2", fmtMoney(t.grossProfit));
+      set("t-gross-margin", fmtPct(t.grossMargin));
+      set("t-fixed", fmtMoney(t.totalFixed));
+      set("t-variable", fmtMoney(t.totalVariable));
+      set("t-opex", fmtMoney(t.totalOpex));
+      set("t-net", fmtMoney(t.netProfit));
+      set("t-net-margin", fmtPct(t.netMargin));
+      const net = $("t-net");
+      net.classList.toggle("text-brand-red", t.netProfit < 0);
+      $("extras-empty").classList.toggle("hidden", document.querySelectorAll(".extra-row").length > 0);
+    }
+
+    function clearForm() {
+      for (const inp of fieldInputs()) inp.value = "";
+      extrasBox.innerHTML = "";
+      noteInput.value = "";
+      render();
+    }
+
+    function fillForm(w: Record<string, any>) {
+      for (const inp of fieldInputs()) {
+        const c = Number(w[inp.dataset.field!]) || 0;
+        inp.value = c ? centsToInput(c) : "";
+      }
+      extrasBox.innerHTML = "";
+      (Array.isArray(w.extra_expenses) ? w.extra_expenses : []).forEach((e: any) =>
+        addExtraRow(String(e?.name ?? ""), e?.kind === "fixed" ? "fixed" : "variable", Number(e?.amount_cents) || 0)
+      );
+      noteInput.value = typeof w.note === "string" ? w.note : "";
+      render();
+    }
+
+    async function loadWeek(weekStart: string) {
+      $("week-range").textContent = weekRangeLabel(weekStart);
+      clearStatus();
+      try {
+        const res = await fetch(`/api/staff/pnl?week=${weekStart}`);
+        if (res.status === 401) { window.location.href = "/admin/login"; return; }
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.error || "Could not load this week.");
+        if (body.week) {
+          fillForm(body.week);
+          $("delete").classList.remove("hidden");
+          setStatus("Loaded saved numbers for this week. Edit and save to update.", "info");
+        } else {
+          clearForm();
+          $("delete").classList.add("hidden");
+        }
+      } catch (e) {
+        clearForm();
+        setStatus(e instanceof Error ? e.message : "Could not load this week.", "err");
+      }
+    }
+
+    async function save() {
+      const btn = $<HTMLButtonElement>("save");
+      btn.disabled = true;
+      btn.querySelector(".save-label")!.classList.add("hidden");
+      btn.querySelector(".save-spinner")!.classList.remove("hidden");
+      try {
+        const res = await fetch("/api/staff/pnl", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(gather()),
+        });
+        if (res.status === 401) { window.location.href = "/admin/login"; return; }
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.error || "Could not save.");
+        setStatus("Saved. This week is in the books.", "ok");
+        $("delete").classList.remove("hidden");
+      } catch (e) {
+        setStatus(e instanceof Error ? e.message : "Could not save.", "err");
+      } finally {
+        btn.disabled = false;
+        btn.querySelector(".save-label")!.classList.remove("hidden");
+        btn.querySelector(".save-spinner")!.classList.add("hidden");
+      }
+    }
+
+    async function del() {
+      if (!confirm("Delete all saved numbers for this week? This can't be undone.")) return;
+      try {
+        const res = await fetch(`/api/staff/pnl?week=${weekInput.value}`, { method: "DELETE" });
+        if (res.status === 401) { window.location.href = "/admin/login"; return; }
+        if (!res.ok) throw new Error();
+        clearForm();
+        $("delete").classList.add("hidden");
+        setStatus("Deleted. The slate is clean for this week.", "ok");
+      } catch {
+        setStatus("Could not delete the week.", "err");
+      }
+    }
+
+    // Wire up
+    weekInput.value = currentMonday();
+    weekInput.addEventListener("change", () => {
+      const m = mondayOfIso(weekInput.value) || currentMonday();
+      weekInput.value = m;
+      loadWeek(m);
+    });
+    $("add-extra").addEventListener("click", () => addExtraRow());
+    $("save").addEventListener("click", save);
+    $("delete").addEventListener("click", del);
+    $("print").addEventListener("click", () => window.print());
+    fieldInputs().forEach((inp) => inp.addEventListener("input", render));
+    noteInput.addEventListener("input", () => {});
+    $("logout").addEventListener("click", async () => {
+      await fetch("/api/staff/logout", { method: "POST" }).catch(() => {});
+      window.location.href = "/admin/login";
+    });
+
+    loadWeek(weekInput.value);
+  </script>
+</AdminLayout>

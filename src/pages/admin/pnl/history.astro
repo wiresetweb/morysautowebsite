@@ -1,0 +1,297 @@
+---
+import AdminLayout from "../../../layouts/AdminLayout.astro";
+import Icon from "../../../components/Icon.astro";
+---
+
+<AdminLayout title="P&L History">
+  <header class="border-b border-white/10 no-print">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/admin" class="flex items-center gap-3">
+          <img src="/morys_logo.png" alt="" width="28" height="28" class="w-7 h-7 object-contain" />
+          <span class="font-condensed font-bold uppercase text-2xl tracking-[0.04em]">Mory's</span>
+        </a>
+        <span class="text-[0.62rem] uppercase tracking-[0.24em] text-brand-yellow font-bold">P&amp;L History</span>
+      </div>
+      <nav class="flex items-center gap-6 text-sm font-semibold uppercase tracking-wider">
+        <a href="/admin" class="text-white/70 hover:text-brand-yellow transition-colors">Dashboard</a>
+        <a href="/admin/pnl" class="text-white/70 hover:text-brand-yellow transition-colors">New entry</a>
+        <button id="logout" class="text-white/70 hover:text-brand-yellow transition-colors inline-flex items-center gap-1">
+          Log out <Icon name="arrow-up-right" size={14} strokeWidth={2.25} />
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="sheet" class="mx-auto max-w-7xl px-5 lg:px-8 py-10">
+    <div class="print-only mb-6">
+      <p class="font-condensed font-bold uppercase text-3xl">Mory's Auto Parts &amp; Glass</p>
+      <p class="text-sm">Profit &amp; Loss — History</p>
+    </div>
+
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="text-[0.7rem] font-bold uppercase tracking-[0.3em] text-brand-yellow no-print">Profit &amp; Loss</p>
+        <h1 class="mt-2 font-condensed font-bold uppercase text-4xl sm:text-5xl">History &amp; comparison</h1>
+      </div>
+      <div class="flex items-center gap-3 no-print">
+        <button id="export" class="inline-flex items-center gap-2 border border-white/25 text-white/80 font-semibold uppercase tracking-wide text-sm px-4 py-2.5 hover:border-brand-yellow transition-colors">
+          Export CSV
+        </button>
+        <button id="print" class="inline-flex items-center gap-2 border border-white/25 text-white/80 font-semibold uppercase tracking-wide text-sm px-4 py-2.5 hover:border-brand-yellow transition-colors">
+          Print
+        </button>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="mt-8 flex flex-wrap items-end gap-3 no-print">
+      <label class="block">
+        <span class="block text-[0.62rem] uppercase tracking-[0.2em] text-white/50 font-bold mb-1">From</span>
+        <input id="from" type="date" class="bg-white/[0.04] border border-white/15 px-3 py-2 text-white focus:outline-none focus:border-brand-yellow" />
+      </label>
+      <label class="block">
+        <span class="block text-[0.62rem] uppercase tracking-[0.2em] text-white/50 font-bold mb-1">To</span>
+        <input id="to" type="date" class="bg-white/[0.04] border border-white/15 px-3 py-2 text-white focus:outline-none focus:border-brand-yellow" />
+      </label>
+      <button id="apply" class="bg-brand-yellow text-brand-navy font-bold uppercase tracking-wide text-sm px-5 py-2.5 hover:opacity-90 transition-opacity">Apply</button>
+      <div class="flex gap-2 sm:ml-2">
+        <button data-quick="4w" class="quick text-xs font-bold uppercase tracking-wider px-3 py-2 border border-white/20 text-white/70 hover:border-brand-yellow transition-colors">Last 4 weeks</button>
+        <button data-quick="month" class="quick text-xs font-bold uppercase tracking-wider px-3 py-2 border border-white/20 text-white/70 hover:border-brand-yellow transition-colors">This month</button>
+        <button data-quick="12w" class="quick text-xs font-bold uppercase tracking-wider px-3 py-2 border border-white/20 text-white/70 hover:border-brand-yellow transition-colors">Last 12 weeks</button>
+      </div>
+    </div>
+
+    <!-- Summary bar -->
+    <div id="summary" class="hidden mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px bg-white/10 border border-white/10 print-section"></div>
+
+    <!-- States -->
+    <div id="loading" class="mt-12 text-center text-white/50 text-sm no-print">Loading…</div>
+    <div id="error" class="hidden mt-12 border border-brand-red/40 bg-brand-red/5 p-6 text-center">
+      <p id="error-msg" class="text-brand-red font-semibold"></p>
+    </div>
+    <div id="empty" class="hidden mt-12 text-center text-white/50">
+      <p class="font-condensed font-bold uppercase text-2xl text-white/70">No weeks in this range</p>
+      <p class="mt-2 text-sm">Pick a different range, or <a href="/admin/pnl" class="text-brand-yellow underline">add a week</a>.</p>
+    </div>
+
+    <!-- Comparison table -->
+    <div id="table-wrap" class="hidden mt-8 overflow-x-auto border border-white/10">
+      <table class="w-full text-sm border-collapse">
+        <thead id="thead"></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <style is:global>
+    .print-only { display: none; }
+    @media print {
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      body { background: #fff !important; }
+      #sheet, #sheet * { color: #000 !important; }
+      #sheet .est-line { color: #555 !important; font-style: italic; }
+      .pos { color: #047857 !important; }
+      .neg { color: #b91c1c !important; }
+      #table-wrap, #summary { border-color: #bbb !important; }
+      table td, table th { border-color: #ddd !important; }
+      @page { margin: 0.4in landscape; }
+    }
+  </style>
+
+  <script>
+    import {
+      compute, fmtMoney, fmtPct, fmtSignedMoney, weekRangeLabel,
+      currentMonday, mondayOfIso, addDaysIso, todayIso,
+      LINE_ROWS_BEFORE_EXTRAS, LINE_ROWS_AFTER_EXTRAS,
+      type PnlWeek, type PnlTotals, type LineRow,
+    } from "../../../lib/pnl.ts";
+
+    const $ = (id: string) => document.getElementById(id)!;
+    const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
+    const show = (id: string, on = true) => $(id).classList.toggle("hidden", !on);
+
+    interface Col { week: PnlWeek; t: PnlTotals; }
+    type Row = { label: string; format: "money" | "pct"; goodWhenUp: boolean; emphasis?: boolean; estimate?: boolean; values: number[] };
+
+    let cols: Col[] = [];
+
+    function shortWeek(weekStart: string): string {
+      const d = new Date(`${weekStart}T00:00:00Z`);
+      return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+    }
+
+    // Collect the union of extra-expense names across all loaded weeks.
+    function extraNames(weeks: PnlWeek[]): { name: string; kind: "fixed" | "variable" }[] {
+      const map = new Map<string, "fixed" | "variable">();
+      for (const w of weeks) for (const e of w.extra_expenses || []) {
+        if (e?.name && !map.has(e.name)) map.set(e.name, e.kind === "fixed" ? "fixed" : "variable");
+      }
+      return [...map.entries()].map(([name, kind]) => ({ name, kind }));
+    }
+    function extraTotalFor(w: PnlWeek, name: string): number {
+      return (w.extra_expenses || []).filter((e) => e.name === name).reduce((s, e) => s + (Number(e.amount_cents) || 0), 0);
+    }
+
+    function buildRows(): Row[] {
+      const extras = extraNames(cols.map((c) => c.week));
+      const rowFrom = (r: LineRow): Row => ({
+        label: r.label, format: r.format, goodWhenUp: r.goodWhenUp, emphasis: r.emphasis, estimate: r.estimate,
+        values: cols.map((c) => r.value(c.week, c.t)),
+      });
+      const extraRows: Row[] = extras.map((x) => ({
+        label: `${x.name} (extra · ${x.kind})`, format: "money", goodWhenUp: false,
+        values: cols.map((c) => extraTotalFor(c.week, x.name)),
+      }));
+      return [
+        ...LINE_ROWS_BEFORE_EXTRAS.map(rowFrom),
+        ...extraRows,
+        ...LINE_ROWS_AFTER_EXTRAS.map(rowFrom),
+      ];
+    }
+
+    function fmtVal(v: number, format: "money" | "pct"): string {
+      return format === "pct" ? fmtPct(v) : fmtMoney(v);
+    }
+    function changeHtml(curr: number, prev: number, goodWhenUp: boolean, format: "money" | "pct"): string {
+      const delta = curr - prev;
+      if (Math.abs(delta) < (format === "pct" ? 0.0005 : 0.5)) {
+        return `<span class="text-white/30">—</span>`;
+      }
+      const favorable = (delta > 0) === goodWhenUp;
+      const cls = favorable ? "pos text-green-400" : "neg text-brand-red";
+      const arrow = delta > 0 ? "▲" : "▼";
+      const txt = format === "pct" ? `${delta > 0 ? "+" : "−"}${Math.abs(delta * 100).toFixed(1)}pp` : fmtSignedMoney(delta);
+      return `<span class="${cls} whitespace-nowrap">${arrow} ${esc(txt)}</span>`;
+    }
+
+    function renderSummary() {
+      const totRev = cols.reduce((s, c) => s + c.t.totalRevenue, 0);
+      const totCogs = cols.reduce((s, c) => s + c.t.totalCogs, 0);
+      const totOpex = cols.reduce((s, c) => s + c.t.totalOpex, 0);
+      const totNet = cols.reduce((s, c) => s + c.t.netProfit, 0);
+      const avgMargin = cols.length ? cols.reduce((s, c) => s + c.t.netMargin, 0) / cols.length : 0;
+      const best = cols.reduce<Col | null>((b, c) => (!b || c.t.netProfit > b.t.netProfit ? c : b), null);
+      const cell = (label: string, val: string, accent = false) =>
+        `<div class="bg-brand-navy p-4"><p class="text-[0.6rem] uppercase tracking-[0.18em] text-white/45 font-bold">${label}</p><p class="mt-1 font-condensed font-bold tabular-nums text-2xl ${accent ? (totNet < 0 ? "text-brand-red" : "text-brand-yellow") : ""}">${val}</p></div>`;
+      $("summary").innerHTML =
+        cell("Total revenue", fmtMoney(totRev)) +
+        cell("Total COGS", fmtMoney(totCogs)) +
+        cell("Total op. exp.", fmtMoney(totOpex)) +
+        cell("Net profit", fmtMoney(totNet), true) +
+        cell("Avg net margin", fmtPct(avgMargin)) +
+        cell("Best week", best ? `${fmtMoney(best.t.netProfit)}` : "—") +
+        `<div class="bg-brand-navy px-4 pb-3 -mt-1 col-span-full text-[0.65rem] text-white/40">${best ? `Best week: ${esc(weekRangeLabel(best.week.week_start))} · ${cols.length} week(s) in range` : ""}</div>`;
+      show("summary", true);
+    }
+
+    function renderTable() {
+      const rows = buildRows();
+      // Header: Line | W1 | Δ | W2 | Δ | ...
+      let head = `<tr class="bg-white/[0.05] text-left text-[0.62rem] uppercase tracking-[0.16em] text-white/55">
+        <th class="px-3 py-3 font-bold sticky left-0 bg-[#10213f] z-10">Line item</th>`;
+      cols.forEach((c, i) => {
+        head += `<th class="px-3 py-3 font-bold text-right whitespace-nowrap">${esc(shortWeek(c.week.week_start))}</th>`;
+        if (i < cols.length - 1) head += `<th class="px-2 py-3 font-bold text-right text-white/35 no-print">Δ</th>`;
+      });
+      head += `</tr>`;
+      $("thead").innerHTML = head;
+
+      const body = rows.map((r) => {
+        const groupCls = r.emphasis ? "font-bold bg-white/[0.03]" : "";
+        const labelCls = r.estimate ? "est-line italic text-brand-yellow" : "text-white/80";
+        let tds = `<td class="px-3 py-2 sticky left-0 bg-[#0f1f3d] ${labelCls} ${r.emphasis ? "font-bold" : ""}">${esc(r.label)}</td>`;
+        r.values.forEach((v, i) => {
+          const valCls = r.estimate ? "est-line italic text-brand-yellow" : "";
+          tds += `<td class="px-3 py-2 text-right tabular-nums whitespace-nowrap ${valCls}">${esc(fmtVal(v, r.format))}</td>`;
+          if (i < r.values.length - 1) {
+            tds += `<td class="px-2 py-2 text-right tabular-nums text-xs no-print">${changeHtml(r.values[i + 1], v, r.goodWhenUp, r.format)}</td>`;
+          }
+        });
+        return `<tr class="border-t border-white/8 ${groupCls}">${tds}</tr>`;
+      }).join("");
+      $("tbody").innerHTML = body;
+      show("table-wrap", true);
+    }
+
+    function buildCsv(): string {
+      const rows = buildRows();
+      const headers = ["Line item", ...cols.map((c) => weekRangeLabel(c.week.week_start))];
+      const lines = [headers];
+      for (const r of rows) {
+        lines.push([r.label, ...r.values.map((v) => (r.format === "pct" ? (v * 100).toFixed(1) + "%" : (v / 100).toFixed(2)))]);
+      }
+      return lines.map((row) => row.map((cell) => {
+        const s = String(cell);
+        return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+      }).join(",")).join("\n");
+    }
+
+    function exportCsv() {
+      if (!cols.length) return;
+      const blob = new Blob([buildCsv()], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `morys-pnl_${$("from").getAttribute("value") || cols[0].week.week_start}_${cols[cols.length - 1].week.week_start}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function load() {
+      const from = ($("from") as HTMLInputElement).value;
+      const to = ($("to") as HTMLInputElement).value;
+      show("loading", true); show("error", false); show("empty", false);
+      show("table-wrap", false); show("summary", false);
+      try {
+        const qs = new URLSearchParams();
+        if (from) qs.set("from", from);
+        if (to) qs.set("to", to);
+        const res = await fetch(`/api/staff/pnl?${qs.toString()}`);
+        if (res.status === 401) { window.location.href = "/admin/login"; return; }
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.error || "Could not load history.");
+        const weeks: PnlWeek[] = (body.weeks || []).map((w: any) => ({ ...w, extra_expenses: Array.isArray(w.extra_expenses) ? w.extra_expenses : [] }));
+        cols = weeks.map((w) => ({ week: w, t: compute(w) }));
+        show("loading", false);
+        if (!cols.length) { show("empty", true); return; }
+        renderSummary();
+        renderTable();
+      } catch (e) {
+        show("loading", false);
+        $("error-msg").textContent = e instanceof Error ? e.message : "Could not load history.";
+        show("error", true);
+      }
+    }
+
+    function setRange(from: string, to: string) {
+      ($("from") as HTMLInputElement).value = from;
+      ($("to") as HTMLInputElement).value = to;
+      load();
+    }
+
+    // Quick selects
+    document.querySelectorAll<HTMLElement>(".quick").forEach((b) => b.addEventListener("click", () => {
+      const kind = b.dataset.quick;
+      const thisMon = currentMonday();
+      if (kind === "4w") setRange(addDaysIso(thisMon, -21), thisMon);
+      else if (kind === "12w") setRange(addDaysIso(thisMon, -77), thisMon);
+      else if (kind === "month") {
+        const t = todayIso();
+        const first = t.slice(0, 8) + "01";
+        setRange(mondayOfIso(first) || first, thisMon);
+      }
+    }));
+    $("apply").addEventListener("click", load);
+    $("export").addEventListener("click", exportCsv);
+    $("print").addEventListener("click", () => window.print());
+    $("logout").addEventListener("click", async () => {
+      await fetch("/api/staff/logout", { method: "POST" }).catch(() => {});
+      window.location.href = "/admin/login";
+    });
+
+    // Default to last 12 weeks.
+    setRange(addDaysIso(currentMonday(), -77), currentMonday());
+  </script>
+</AdminLayout>

@@ -123,7 +123,7 @@ then set `FROM_EMAIL` to an address on that domain and redeploy. A real
 
 ## Still to wire (future passes)
 
-- **Leads inbox** is built (`/admin/leads`); **P&L tool** still pending Alex's spec.
+- **Leads inbox** (`/admin/leads`) and **Profit & Loss** (`/admin/pnl` entry + `/admin/pnl/history`) are built. P&L stores one row per week in `public.pnl_weeks` (money in integer cents; eBay COGS derived at 65% of gross; dynamic extras in JSONB). Backend: `functions/api/staff/pnl.ts`. Shared math: `src/lib/pnl.ts`.
 - Spanish (`/es/`) routes are live and indexed (sitemap + hreflang). Owner
   review of the translations is still worthwhile before launch.
 - Real photos (see ratios noted in each `PhotoPlaceholder`).
